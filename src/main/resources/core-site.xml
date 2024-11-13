@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:9000</value>
+    </property>
+    <property>
+        <name>mapreduce.jobtracker.staging.root.dir</name>
+        <value>/tmp/hadoop-yarn/staging</value>
+    </property>
+
+    <property>
+        <name>mapreduce.job.user.classpath.first</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>fs.permissions.umask-mode</name>
+        <value>022</value>
+    </property>
+</configuration>
