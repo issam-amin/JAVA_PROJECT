@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.java_project.Controller.DashboardController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="436.0" prefWidth="703.0"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.DashboardController">
+   <VBox alignment="CENTER" layoutX="90.0" layoutY="31.0" prefHeight="371.0" prefWidth="503.0">
+      <children>
+         <HBox stylesheets="@Style/barChart.css" fx:id="pane" prefHeight="400.0" prefWidth="800.0" >
+         </HBox>
+          <Button mnemonicParsing="false" onAction="#onClickStart" text="Start" />
+      </children>
+   </VBox>
 
 </AnchorPane>

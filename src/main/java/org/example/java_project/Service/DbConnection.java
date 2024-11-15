@@ -1,0 +1,65 @@
+package org.example.java_project.Service;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.*;
+
+public class DbConnection {
+
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/claims", "root", "PHW#84#jeor");
+        }catch  (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+    public static boolean export(String table){
+        String csvFilePath = "src/main/resources/data.csv";
+        try {
+            Connection connection = getConnection();
+            String sql = "SELECT * FROM "+ table; // Query to extract table data
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            // Write CSV file
+            FileWriter csvWriter = new FileWriter(csvFilePath);
+            // Get column names and write as header row in CSV
+            int columnCount = resultSet.getMetaData().getColumnCount();
+            // Write data rows
+            while (resultSet.next()) {
+                for (int i = 1; i <= columnCount; i++) {
+                    csvWriter.append(resultSet.getString(i));
+                    if (i < columnCount) csvWriter.append(","); // Add comma if not the last column
+                }
+                csvWriter.append("\n"); // New line after each row
+            }
+            csvWriter.flush();
+            csvWriter.close();
+            System.out.println("CSV file created successfully: " + csvFilePath);
+            return  true;
+
+            /*WordCount.RunJob("src/main/resources/data.csv","/test/output","/test/input/data.csv");*/
+
+        } catch (IOException e) {
+            System.err.println("Error writing to CSV file: " + e.getMessage());
+            return false;
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+
+    public  static void close() {
+        Connection con = getConnection();
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+}

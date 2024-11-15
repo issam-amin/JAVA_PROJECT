@@ -1,0 +1,11 @@
+.data0 {
+    -fx-bar-fill: #FF6347;
+    -fx-fill-width: 5px/* Tomato color */
+}
+
+.data1 {
+    -fx-bar-fill: #4682B4; /* Steel Blue color */
+}
+.data2 {
+    -fx-bar-fill: #32CD32; /* Lime Green color */
+}
