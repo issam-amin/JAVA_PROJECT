@@ -37,6 +37,7 @@ public class DashboardController {
         barChart.getData().add(sampleSeries);
         pane.getChildren().add(barChart);
         Top3Job job = new Top3Job(JobName);
+
         job.setOnSucceeded(workerStateEvent -> {
             Platform.runLater(() -> {
             CategoryAxis xAxis2 = new CategoryAxis();
@@ -64,6 +65,7 @@ public class DashboardController {
             pane.getChildren().add(barChart);
             });
         });
+
         Thread testJob = new Thread(job);
         testJob.setDaemon(true);
         testJob.start();
@@ -88,5 +90,7 @@ public class DashboardController {
             // Perform additional actions, such as updating other parts of the UI
         });
     }
+
+
 
 }

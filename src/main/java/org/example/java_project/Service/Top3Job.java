@@ -29,13 +29,11 @@ public class Top3Job extends Task<XYChart.Series<String, Number>> {
         this.JobName = JobName;
         this.input = "/test/input_"+JobName+"/data.csv";
         this.output = "/test/output_"+JobName;
-
     }
 
     @Override
     public XYChart.Series<String, Number> call() {
         /*boolean exportRes = DbConnection.export("rec");*/
-
 
        if(true) {
         try {
@@ -56,10 +54,8 @@ public class Top3Job extends Task<XYChart.Series<String, Number>> {
         Path hdfsFilePath = new Path(hdfsFilePathStr);
         Path localPath = new Path(localFilePath);
 
-
-        Configuration conf = new Configuration();
-        FileSystem fs = FileSystem.get(conf);
-        Job job = Job.getInstance(conf, JobName);
+        Job job = hadoopConf.getJob(JobName);
+        FileSystem fs = hadoopConf.getFileSystem();
         job.setJarByClass(Top3Job.class);
         job.setMapperClass(TokenizerMapper.class);
         job.setCombinerClass(SumCombiner.class);

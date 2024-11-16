@@ -12,20 +12,25 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileStatus;*/
 
-/*import java.io.BufferedReader;*/
+
 import java.io.IOException;
-/*import java.io.InputStreamReader;
-import java.util.*;*/
+
 
 public class hadoopConf {
+    static final Configuration conf ;
+
+    static {
+        conf = new Configuration();
+        conf.set("fs.defaultFS", "hdfs://localhost:9000/");
+    }
+
 
     public static Job getJob( String jobName) {
         try {
-            return Job.getInstance(getConfiguration(), "wordcount");
+            return Job.getInstance(getConfiguration(), jobName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public static FileSystem getFileSystem() {
@@ -37,8 +42,6 @@ public class hadoopConf {
     }
 
     static private Configuration getConfiguration() {
-        final Configuration conf = new Configuration();
-        conf.set("fs.defaultFS", "hdfs://localhost:9000/");
         return conf;
     }
 
