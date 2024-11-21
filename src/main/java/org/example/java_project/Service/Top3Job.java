@@ -112,7 +112,7 @@ public class Top3Job extends Task<XYChart.Series<String, Number>> {
             String[] tokens = line.split("\t");
             System.out.println(line);
             some += Integer.parseInt(tokens[1]);
-            list.add(new XYChart.Data<String,Number>(tokens[0], Integer.parseInt(tokens[1])));
+            list.add(new XYChart.Data<String,Number>(DbConnection.getType(tokens[0]), Integer.parseInt(tokens[1])));
 
         }
         reader.close();
