@@ -86,10 +86,10 @@ public class DashboardController {
     private void addDataPointInteractivity(XYChart.Data<String, Number> dataPoint) {
         // Add hover effect
         dataPoint.getNode().setOnMouseEntered(event -> {
-            dataPoint.getNode().setStyle("-fx-bar-fill: #ff6347;"); // Change color on hover
-            Tooltip tooltip = new Tooltip(dataPoint.getXValue() + ": " + dataPoint.getYValue() + "%");
+            dataPoint.getNode().setStyle("-fx-bar-fill: black;"); // Change color on hover
+            Tooltip tooltip = new Tooltip(dataPoint.getXValue() + ": " + dataPoint.getYValue().intValue() + "%");
             tooltip.setShowDelay(Duration.seconds(0.2));
-            Tooltip.install(dataPoint.getNode(), tooltip); // Show tooltip on hover
+            Tooltip.install(dataPoint.getNode(), tooltip);
         });
         dataPoint.getNode().setOnMouseExited(event -> {
             dataPoint.getNode().setStyle(""); // Reset color on exit

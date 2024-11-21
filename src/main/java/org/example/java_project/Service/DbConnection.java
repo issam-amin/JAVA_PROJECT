@@ -3,18 +3,20 @@ package org.example.java_project.Service;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
+import java.util.HashMap;
 
 public class DbConnection {
-
-    public static Connection getConnection() {
+    static final Connection connection;
+    static {
         try {
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
+            connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/claims", "root", "PHW#84#jeor");
         }catch  (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
-
+    public static Connection getConnection() {
+        return connection;
+    }
 
     public static boolean export(String table){
         String csvFilePath = "src/main/resources/data.csv";
@@ -51,6 +53,25 @@ public class DbConnection {
         }
     }
 
+    public  static String getType(String id ){
+
+        Connection connection = getConnection();
+        HashMap<String, String> typerec = new HashMap<>();
+
+            String sql = "SELECT * FROM typerec WHERE  id = "+id ; // Query to extract table data
+            Statement statement = null;
+            try {
+                statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql);
+                while (resultSet.next()) {
+                   return resultSet.getString("NomType");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            return null;
+    }
 
     public  static void close() {
         Connection con = getConnection();
