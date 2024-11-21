@@ -56,6 +56,8 @@ public class Top3Job extends Task<XYChart.Series<String, Number>> {
 
         Job job = hadoopConf.getJob(JobName);
         FileSystem fs = hadoopConf.getFileSystem();
+
+
         job.setJarByClass(Top3Job.class);
         job.setMapperClass(TokenizerMapper.class);
         job.setCombinerClass(SumCombiner.class);

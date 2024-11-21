@@ -8,7 +8,7 @@ public class DbConnection {
 
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/claims", "root", "PHW#84#jeor");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
         }catch  (SQLException e) {
             throw new RuntimeException(e);
         }
