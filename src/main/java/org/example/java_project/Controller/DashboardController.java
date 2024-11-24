@@ -84,16 +84,33 @@ public class DashboardController implements Initializable {
     }
 
 
-    @FXML
-    public void handleTop3(){
-        pnlOrders.getChildren().clear();
-        try {
-            pnlOrders.setStyle("-fx-background-color : #02030A");
-            pnlOrders.toFront();
-            Node top3job = FXMLLoader.load(getClass().getResource("../Top3job.fxml"));
-            pnlOrders.getChildren().add(top3job);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        @FXML
+        public void handleTop3() {
+            pnlOrders.getChildren().clear();
+            try {
+                pnlOrders.setStyle("-fx-background-color : #02030A");
+                pnlOrders.toFront();
+                Node top3job = FXMLLoader.load(getClass().getResource("../Top3job.fxml"));
+                pnlOrders.getChildren().add(top3job);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+
+
+        @FXML
+        void PieChart() {
+            pnlMenus.getChildren().clear();
+            try {
+                pnlMenus.setStyle("-fx-background-color : #53639F");
+                pnlMenus.toFront();
+                Node RecType = FXMLLoader.load(getClass().getResource("../PieChart.fxml"));
+                pnlMenus.getChildren().add(RecType);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+
     }
-}

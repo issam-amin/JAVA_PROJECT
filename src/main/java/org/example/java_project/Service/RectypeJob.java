@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
@@ -28,16 +29,26 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
     private final String output;
     private static String jobName;
 
+    private final String currentDate;
+    private LocalTime jobTime;
+
+
     public RectypeJob(String jobName) {
         this.jobName = jobName;
+        this.jobTime = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.currentDate = LocalDate.now().format(formatter);
+       // System.out.println(currentDate);
         this.input = "/test/input_" + jobName + "/data.csv";
-        this.output = "/test/output_" + jobName;
+        this.output = "/test/output_" +currentDate+"_"+ jobName;
     }
 
     public HashMap<String, Integer> call() {
-        /*boolean exportRes = DbConnection.export("rec");*/
 
+        boolean exportRes = DbConnection.export("rec");
+      //  System.out.println(exportRes);
         try {
+
             return RunJob("src/main/resources/data.csv", output, input, jobName);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -134,11 +145,10 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
             System.exit(1);
         }
 
-        // Read and print the output
         System.out.println("MapReduce Job Completed. Reading Output...");
         Path outputFile = new Path(outputPathStr + "/part-r-00000");
 
-        // Check if the file exists
+
         if (!fs.exists(outputFile)) {
             System.err.println("Output file not found!");
             System.exit(-1);
