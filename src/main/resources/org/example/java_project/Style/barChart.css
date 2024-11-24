@@ -1,5 +1,5 @@
 .data0 {
-    -fx-bar-fill: #FF6347;
+    -fx-bar-fill: #47ffce;
     -fx-fill-width: 5px/* Tomato color */
 }
 
@@ -7,5 +7,5 @@
     -fx-bar-fill: #4682B4; /* Steel Blue color */
 }
 .data2 {
-    -fx-bar-fill: #32CD32; /* Lime Green color */
+    -fx-bar-fill: #47cd32; /* Lime Green color */
 }

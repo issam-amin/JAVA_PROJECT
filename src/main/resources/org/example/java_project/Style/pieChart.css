@@ -1,0 +1,11 @@
+.pie-chart .data0.chart-pie {
+    -fx-pie-color: #00ffd9;
+}
+
+.chart-pie .data1.chart-pie{
+    -fx-pie-color: #0077ff;
+}
+
+.chart-pie .data2.chart-pie {
+    -fx-pie-color: #048000;
+}
