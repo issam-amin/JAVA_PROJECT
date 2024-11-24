@@ -1,5 +1,5 @@
 .data0 {
-    -fx-bar-fill: #47ffce;
+    -fx-bar-fill: #FF6347;
     -fx-fill-width: 5px/* Tomato color */
 }
 
@@ -7,5 +7,25 @@
     -fx-bar-fill: #4682B4; /* Steel Blue color */
 }
 .data2 {
-    -fx-bar-fill: #47cd32; /* Lime Green color */
+    -fx-bar-fill: #32CD32; /* Lime Green color */
+}
+.chart-plot-background {
+    -fx-background-color: transparent; /* Optional: Make background transparent */
+}
+
+.axis .tick-mark {
+    -fx-stroke: none; /* Hides tick marks */
+}
+
+.axis .axis-line {
+    -fx-stroke: none; /* Hides axis lines (optional) */
+}
+
+.axis .chart-grid-lines {
+    -fx-stroke: none; /* Hides grid lines */
+}
+.tick-label {
+    -fx-fill: white;        /* Change the font color (optional) */
+    -fx-font-size: 14px;    /* Change the font size */
+    -fx-font-weight: bold; /* Change the font weight (bold, normal, etc.) */
 }
