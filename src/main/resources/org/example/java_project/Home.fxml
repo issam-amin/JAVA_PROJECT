@@ -49,7 +49,7 @@
                         <Insets left="50.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnOrders" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Orders">
+                <Button fx:id="btnOrders" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleTop3" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Orders">
                     <graphic>
                         <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                             <image>
