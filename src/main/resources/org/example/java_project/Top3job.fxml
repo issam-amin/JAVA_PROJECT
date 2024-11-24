@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="554.0" prefWidth="793.0" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="org.example.java_project.Controller.Top3jobController">
+      <Button layoutX="86.0" layoutY="113.0" mnemonicParsing="false" onAction="#onClickStart" text="refresh" />
+    <VBox alignment="CENTER" layoutX="290.0" prefHeight="251.0" prefWidth="503.0">
+
+        <HBox fx:id="pane" stylesheets="@Style/barChart.css">
+        </HBox>
+    </VBox>
+
+</AnchorPane>
