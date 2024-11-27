@@ -8,7 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox fx:id="itemC" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="695.0" spacing="80.0" style="-fx-background-color: #02030A; -fx-background-radius: 5; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="itemC" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="895.0" spacing="80.0" style="-fx-background-color: #02030A; -fx-background-radius: 5; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -18,18 +18,18 @@
                 <Insets left="10.0" />
             </HBox.margin>
         </ImageView>
-        <Label text="KeepToo" textFill="#b7c3d7" />
-        <Label text="JFK" textFill="#b7c3d7">
+        <Label fx:id="id" prefHeight="17.0" prefWidth="117.0" text="KeepToo" textFill="#b7c3d7" />
+        <Label fx:id="count" prefHeight="17.0" prefWidth="85.0" text="JFK" textFill="#b7c3d7">
             <HBox.margin>
                 <Insets />
             </HBox.margin>
         </Label>
-        <Label text="10/11/2018" textFill="#b7c3d7">
+        <Label fx:id="countDate" text="10/11/2018" textFill="#b7c3d7">
             <HBox.margin>
                 <Insets />
             </HBox.margin>
         </Label>
-        <Label text="\$200" textFill="#b7c3d7">
+        <Label fx:id="percentage" prefHeight="17.0" prefWidth="33.0" text="\$200" textFill="#b7c3d7">
             <HBox.margin>
                 <Insets />
             </HBox.margin>

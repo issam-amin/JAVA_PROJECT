@@ -15,17 +15,16 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 import java.time.LocalDate;
-import java.util.List;
-
-public class Top3Job extends Task<XYChart.Series<String, Number>> {
+import org.example.java_project.Util.Pair;
+public class Top3Job extends Task<XYChart.Series<String, Number>>  {
     private String input ;
     private String output;
     private String JobName;
     private JobType jobType;
+    private static ArrayList<Pair>  IssusCount   = new ArrayList<>();
+    public static int  some  = 0;
     private static  FileSystem fs ;
 
 
@@ -39,8 +38,7 @@ public class Top3Job extends Task<XYChart.Series<String, Number>> {
     }
 
     @Override
-    public XYChart.Series<String, Number> call() throws InterruptedException {
-        /*boolean exportRes = DbConnection.export("rec");*/
+    public XYChart.Series<String, Number> call() throws IOException {
         fs = hadoopConf.getFileSystem();
         boolean tuday_output = false;
         try {
@@ -53,22 +51,20 @@ public class Top3Job extends Task<XYChart.Series<String, Number>> {
             case NORMAL: {
                 try {
                      if(tuday_output){
-                         System.out.println("here");
                         return FormatReturn();
                      }else {
-
                         return RunJob("src/main/resources/data.csv");
-
                      }
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new IOException("Error while reading data from " + output);
                 }
             }
             case REFRESH: {
                 try {
+                    DbConnection.export("rec");
                     return RunJob("src/main/resources/data.csv");
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new IOException("error while refreshing");
                 }
             }
     }
@@ -132,13 +128,14 @@ public class Top3Job extends Task<XYChart.Series<String, Number>> {
         String line;
         XYChart.Series<String, Number> updatedSeries = new XYChart.Series<>();
         ArrayList <XYChart.Data<String,Number>>  list  = new ArrayList<>();
-        int some = 0;
+        IssusCount.clear();
+        some = 0;
         while ((line = reader.readLine()) != null) {
             String[] tokens = line.split("\t");
             some += Integer.parseInt(tokens[1]);
             System.out.println(line);
             list.add(new XYChart.Data<String,Number>(tokens[0], Integer.parseInt(tokens[1])));
-
+            IssusCount.add(new Pair(tokens[0] , Integer.parseInt(tokens[1])));
         }
         reader.close();
         inputStream.close();
@@ -152,6 +149,10 @@ public class Top3Job extends Task<XYChart.Series<String, Number>> {
         updatedSeries.getData().add(list.get(2));
         return updatedSeries;
 
+    }
+
+    public  static ArrayList<Pair> getlistComplaints(){
+        return  IssusCount;
     }
 
 
@@ -186,23 +187,7 @@ public class Top3Job extends Task<XYChart.Series<String, Number>> {
         private List<Pair> keyValueList = new ArrayList<>();
 
         // Custom Pair class for storing key-value pairs
-        private static class Pair {
-            private String key;
-            private int value;
 
-            public Pair(String key, int value) {
-                this.key = key;
-                this.value = value;
-            }
-
-            public String getKey() {
-                return key;
-            }
-
-            public int getValue() {
-                return value;
-            }
-        }
         /*private HashMap<Text, IntWritable> CountMap = new HashMap<>();*/
 
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {

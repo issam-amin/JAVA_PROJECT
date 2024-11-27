@@ -19,6 +19,8 @@ public class DashboardController implements Initializable {
     private VBox pnItems = null;
     @FXML
     private Button btnOverview;
+    @FXML
+    private VBox top3job ;
 
     @FXML
     private Button btnOrders;
@@ -86,12 +88,12 @@ public class DashboardController implements Initializable {
 
         @FXML
         public void handleTop3() {
-            pnlOrders.getChildren().clear();
+            top3job.getChildren().clear();
             try {
-                pnlOrders.setStyle("-fx-background-color : #02030A");
-                pnlOrders.toFront();
-                Node top3job = FXMLLoader.load(getClass().getResource("../Top3job.fxml"));
-                pnlOrders.getChildren().add(top3job);
+                top3job.setStyle("-fx-background-color : #02030A");
+                top3job.toFront();
+                Node node = FXMLLoader.load(getClass().getResource("../Top3job.fxml"));
+                top3job.getChildren().add(node);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -111,6 +113,5 @@ public class DashboardController implements Initializable {
             }
 
         }
-
 
     }
