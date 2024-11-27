@@ -1,11 +1,30 @@
-.pie-chart .data0.chart-pie {
-    -fx-pie-color: #00ffd9;
+.chart-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
 }
 
-.chart-pie .data1.chart-pie{
-    -fx-pie-color: #0077ff;
+.chart-legend {
+    -fx-background-color: #f9f9f9;
+    -fx-border-color: #d9d9d9;
 }
 
-.chart-pie .data2.chart-pie {
-    -fx-pie-color: #048000;
+.default-color0.chart-pie {
+    -fx-pie-color: #47f0ff; /* Light Blue for Pending */
+}
+
+.default-color1.chart-pie {
+    -fx-pie-color: #0077ff; /* Blue for In Progress Critique */
+}
+
+.default-color2.chart-pie {
+    -fx-pie-color: #32CD32; /* Green for Completed */
+}
+
+.chart-pie-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-padding: 2px;
+    -fx-background-radius: 3px;
 }

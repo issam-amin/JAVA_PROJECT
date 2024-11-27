@@ -1,7 +1,9 @@
 package org.example.java_project.Controller;
 import javafx.scene.Scene;
+import javafx.scene.control.DatePicker;
+import org.example.java_project.Service.AllJobs;
 import org.example.java_project.Service.RectypeJob;
-
+import org.example.java_project.Service.JobType;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +15,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
+
+import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
@@ -24,13 +29,14 @@ public class RectypeController implements Initializable {
     protected HBox panepie;
     private Random random = new Random();
     private PieChart loadingPieChart;
-
+    @FXML
+    private DatePicker datePicker;
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        runjob2("chart2");
+    public void initialize(URL url, ResourceBundle resourceBundle ) {
+        runjob2("chart2",JobType.NORMAL);
     }
     public void refresh_Piechart(ActionEvent actionEvent) {
-        runjob2("chart2");
+        runjob2("chart2",JobType.REFRESH);
     }
 
 
@@ -59,10 +65,10 @@ public class RectypeController implements Initializable {
         jobThread.setDaemon(true);
         jobThread.start();
     }*/
-    protected void runjob2(String jobName) {
+    protected void runjob2(String jobName, JobType jobType) {
         showLoadingPieChart();
 
-        RectypeJob job = new RectypeJob(jobName);
+        RectypeJob job = new RectypeJob(jobName,jobType);
 
         job.setOnSucceeded(workerStateEvent -> Platform.runLater(() -> {
             HashMap<String, Integer> jobResults = job.getValue();
@@ -102,25 +108,13 @@ public class RectypeController implements Initializable {
         if (scene != null) {
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../Style/pieChart.css")).toExternalForm());
         }
-       /* for (PieChart.Data data : loadingPieChart.getData()) {
-            switch (data.getName()) {
-                case "Pending":
-                    data.getNode().setStyle("-fx-pie-color: #47f0ff;");
-                    break;
-                case "In Progress Critique":
-                    data.getNode().setStyle("-fx-pie-color: #0077ff;");
-                    break;
-                case "Completed":
-                    data.getNode().setStyle("-fx-pie-color: #32CD32;");
-                    break;
-            }
-        }*/
         panepie.getChildren().clear();
         panepie.getChildren().add(loadingPieChart);
     }
     private void updatePieChartData(HashMap<String, Integer> jobResults) {
         int total = jobResults.values().stream().mapToInt(Integer::intValue).sum();
-
+       /* clientStatsController clientStatsController = new clientStatsController();
+        clientStatsController.getREC();*/
         for (PieChart.Data data : loadingPieChart.getData()) {
             switch (data.getName()) {
                 case "Pending":
@@ -167,5 +161,49 @@ public class RectypeController implements Initializable {
     }
 
 
+    public void getOutputForDate(ActionEvent actionEvent) {
+        RectypeJob job = new RectypeJob("chart2", JobType.NORMAL);
+        LocalDate selectedDate = datePicker.getValue();
+
+        if (selectedDate == null) {
+            System.out.println("No date selected!");
+            return;
+        }
+
+        String formattedDate = selectedDate.toString();
+        System.out.println("Selected Date: " + formattedDate);
+
+        Thread jobThread = new Thread(job);
+        jobThread.setDaemon(true);
+        jobThread.start();
+
+        AllJobs allJobs = new AllJobs();
+        try {
+            // Fetch data for the selected date
+            HashMap<String, Integer> results = allJobs.FormatReturn(formattedDate, "chart2");
+
+            // Check if results are empty
+            if (results.isEmpty()) {
+                System.out.println("No data found for the selected date: " + formattedDate);
+
+                // Fallback to previous data
+                System.out.println("Fetching data from the most recent available date...");
+                results = allJobs.getPreviousData("chart2");
+
+                if (results.isEmpty()) {
+                    System.out.println("No previous data available.");
+                    return;
+                }
+            }
+
+            // Print and update the UI with the results
+            results.forEach((key, value) -> System.out.println(key + ": " + value));
+            HashMap<String, Integer> finalResults = results;
+            Platform.runLater(() -> updatePieChartData(finalResults));
+
+        } catch (IOException e) {
+            System.out.println("Error fetching data for the selected date: " + formattedDate);
+        }
+    }
 
 }

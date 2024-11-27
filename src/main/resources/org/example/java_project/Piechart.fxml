@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.RectypeController">
-    <VBox alignment="CENTER" layoutX="90.0" layoutY="31.0" prefHeight="371.0" prefWidth="503.0">
-        <children>
+<!--<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.RectypeController">
+    <VBox alignment="CENTER" layoutX="90.0" layoutY="31.0" prefHeight="371.0" prefWidth="503.0" spacing="10.0">
 
-            <HBox fx:id="panepie" prefHeight="393.0" prefWidth="606.0" stylesheets="@Style/pieChart.css" />
+        &lt;!&ndash; HBox for DatePicker and Get Button &ndash;&gt;
+        <HBox alignment="CENTER" spacing="10.0">
+            <DatePicker fx:id="datePicker" />
+            <Button mnemonicParsing="false" onAction="#getOutputForDate" text="Get" />
+        </HBox>
 
-                  <Button mnemonicParsing="false" onAction="#refresh_Piechart" prefHeight="29.0" prefWidth="74.0" text="Refresh" />
-        </children>
+        &lt;!&ndash; Pane for the Pie Chart &ndash;&gt;
+        <HBox fx:id="panepie" prefHeight="300.0" prefWidth="503.0" stylesheets="@Style/pieChart.css" />
+
+        &lt;!&ndash; Refresh Button &ndash;&gt;
+        <Button mnemonicParsing="false" onAction="#refresh_Piechart" prefHeight="29.0" prefWidth="74.0" text="Refresh" />
 
     </VBox>
-</AnchorPane>
+</AnchorPane>-->
+
+    <VBox alignment="CENTER" layoutX="90.0" layoutY="31.0" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.RectypeController">
+        <!-- HBox for DatePicker and Get Button -->
+        <HBox alignment="CENTER" spacing="10.0">
+            <DatePicker fx:id="datePicker" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#getOutputForDate" text="Get" HBox.hgrow="NEVER"/>
+        </HBox>
+
+        <!-- Pane for the Pie Chart (Flexible resizing) -->
+        <HBox fx:id="panepie" prefHeight="300.0" prefWidth="503.0" stylesheets="@Style/pieChart.css" HBox.hgrow="ALWAYS">
+            <!-- Pie Chart content goes here -->
+        </HBox>
+
+        <!-- Refresh Button, stretches when resized -->
+        <Button mnemonicParsing="false" onAction="#refresh_Piechart" prefHeight="29.0" prefWidth="74.0" text="Refresh" VBox.vgrow="NEVER" />
+    </VBox>
+
