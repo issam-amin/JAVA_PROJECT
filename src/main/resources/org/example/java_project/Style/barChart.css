@@ -29,3 +29,18 @@
     -fx-font-size: 14px;    /* Change the font size */
     -fx-font-weight: bold; /* Change the font weight (bold, normal, etc.) */
 }
+
+#dateButton ,#refrechButton{
+    -fx-background-color: #10165F ;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+#dateButton:hover ,#refrechButton:hover{
+    -fx-background-color: #1620A1 ;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+#date{
+    -fx-background-color:#10165F ;
+}
