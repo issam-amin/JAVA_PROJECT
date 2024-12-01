@@ -32,7 +32,7 @@ public class Top3Job extends Task<XYChart.Series<String, Number>>  {
     public Top3Job(String JobName , JobType jobType ){
         this.JobName = JobName;
         LocalDate currentDate = LocalDate.now();
-        this.input = "/test/input_"+currentDate.toString()+"/data.csv";
+        this.input = "/test/input/data.csv";
         this.output = "/test/output_"+currentDate.toString()+"_"+JobName;
         this.jobType = jobType;
     }

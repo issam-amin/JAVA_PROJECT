@@ -76,7 +76,7 @@ public class DashboardController implements Initializable {
             try {
                 top3job.setStyle("-fx-background-color : #02030A");
                 top3job.toFront();
-                Node node = FXMLLoader.load(getClass().getResource("../Top3job.fxml"));
+                Node node = FXMLLoader.load(getClass().getResource("../Barchar/Top3job.fxml"));
                 top3job.getChildren().add(node);
             } catch (IOException e) {
                 throw new RuntimeException(e);
