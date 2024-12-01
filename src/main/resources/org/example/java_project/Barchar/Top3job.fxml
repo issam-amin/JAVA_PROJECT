@@ -59,7 +59,7 @@
       <Pane prefHeight="86.0" prefWidth="1027.0" VBox.vgrow="ALWAYS" />
       <VBox fx:id="List" alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
-            <HBox fx:id="itemC1" alignment="CENTER" maxWidth="-Infinity" prefHeight="50.0" prefWidth="895.0" spacing="80.0" style="-fx-background-color: #02030A; -fx-background-radius: 5; -fx-background-insets: 0;">
+            <HBox fx:id="itemC1" alignment="CENTER" maxWidth="-Infinity" prefHeight="50.0" spacing="80.0" style="-fx-background-color: #02030A; -fx-background-radius: 5; -fx-background-insets: 0;">
                <children>
                   <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -85,56 +85,28 @@
                         <Insets />
                      </HBox.margin>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#exportJob" prefHeight="10.0" prefWidth="60.0" style="-fx-border-color: #2A73FF; -fx-border-radius: 0; -fx-background-color: transparent;"  text="Action">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Button>
+                  <HBox fx:id="exportAction" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="81.0" style="-fx-border-radius: 20;" HBox.hgrow="NEVER">
+                     <children>
+                        <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportJob" prefHeight="25.0" prefWidth="55.0" text="Export">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                        <ImageView fitHeight="17.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/export.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
                </children>
                <effect>
                   <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
                </effect>
             </HBox>
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="285.0" prefWidth="1021.0"  vbarPolicy="NEVER">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="285.0" prefWidth="1021.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="pnItems" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="311.0" prefWidth="1025.0" style="-fx-background-color: #02030A;">
-                      <HBox fx:id="itemC" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="50.0" spacing="90.0" style="-fx-background-color: #02030A; -fx-background-radius: 5; -fx-background-insets: 0;">
-                          <children>
-                              <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                  <image>
-                                      <Image url="@../../images/icons8_GPS_Antenna_64px_1.png" />
-                                  </image>
-                                  <HBox.margin>
-                                      <Insets left="10.0" />
-                                  </HBox.margin>
-                              </ImageView>
-                              <Label text="KeepToo" textFill="#b7c3d7" />
-                              <Label text="JFK" textFill="#b7c3d7">
-                                  <HBox.margin>
-                                      <Insets />
-                                  </HBox.margin>
-                              </Label>
-                              <Label text="10/11/2018" textFill="#b7c3d7">
-                                  <HBox.margin>
-                                      <Insets />
-                                  </HBox.margin>
-                              </Label>
-                              <Label text="\$200" textFill="#b7c3d7">
-                                  <HBox.margin>
-                                      <Insets />
-                                  </HBox.margin>
-                              </Label>
-                              <Button mnemonicParsing="false" prefHeight="10.0" prefWidth="60.0" style="-fx-border-color: #2A73FF; -fx-border-radius: 20;" text="active">
-                                  <HBox.margin>
-                                      <Insets />
-                                  </HBox.margin>
-                              </Button>
-                          </children>
-                          <effect>
-                              <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
-                          </effect>
-                      </HBox>
-                  </VBox>
+                  <VBox fx:id="pnItems" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="311.0" style="-fx-background-color: #02030A;" />
                </content>
             </ScrollPane>
          </children>

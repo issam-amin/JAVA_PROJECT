@@ -69,6 +69,20 @@
     -fx-background-color: #02030A;
 }
 
+#exportAction{
+    -fx-text-fill: white;
+    -fx-background-color: #16a838;
+    -fx-background-radius: 5;
+}
+
+#exportButton{
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+
+}
+#exportAction:hover{
+    -fx-background-color: #107b2a;
+}
 
 /*
 .scroll-bar:horizontal .track,

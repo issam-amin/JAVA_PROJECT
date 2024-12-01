@@ -3,7 +3,6 @@ package org.example.java_project.Controller;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,7 +15,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -33,15 +34,14 @@ import org.example.java_project.Service.Top3Job;
 import org.example.java_project.Service.hadoopConf;
 import org.example.java_project.Util.Pair;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import org.controlsfx.control.Notifications;
+import java.util.concurrent.atomic.AtomicReference;
 
+import static org.example.java_project.MainD.*;
 
 
 public class Top3jobController implements Initializable {
@@ -241,8 +241,6 @@ public class Top3jobController implements Initializable {
     }
 
 
-
-
     void listComplaints(  ArrayList<Pair> IssusCount,  LocalDate date  , int some){
         pnItems.getChildren().clear();
         for (Pair pair : IssusCount) {
@@ -250,6 +248,15 @@ public class Top3jobController implements Initializable {
                 Node node =  FXMLLoader.load(getClass().getResource("../Item.fxml"));
 
                 Parent parentNode = (Parent) node;
+
+                ImageView image = (ImageView) parentNode.lookup("#image") ;
+
+
+                if(pair.getValue() > some / 4){
+                  image.setImage(new Image(getClass().getResource("../../images/redArrows.png").toExternalForm()));
+                }else{
+                  image.setImage(new Image(getClass().getResource("../../images/greenArrows.png").toExternalForm()));
+                }
 
                 Label label = (Label) parentNode.lookup("#id");
                 if (label != null) {
@@ -270,7 +277,8 @@ public class Top3jobController implements Initializable {
                 }
 
                 final Button Action = (Button) parentNode.lookup("#ActionButton");
-                Action.setOnMouseClicked(event ->{
+                Action.setDisable(true);
+                Action.setVisible(false);                /*Action.setOnMouseClicked(event ->{
                     Stage newStage = new Stage();
                     newStage.setTitle("New Stage");
                     Parent newRoot = null;
@@ -287,7 +295,7 @@ public class Top3jobController implements Initializable {
                     Scene newScene = new Scene(newRoot);
                     newStage.setScene(newScene);
                     newStage.show(); // Show the new stage
-                });
+                });*/
 
 
                 pnItems.getChildren().add(node);
@@ -299,7 +307,6 @@ public class Top3jobController implements Initializable {
         }
 
     }
-
 
     private void showCustomPopup(Stage parentStage) {
         // Create a new Stage for the pop-up
@@ -326,26 +333,60 @@ public class Top3jobController implements Initializable {
     void exportJob(){
         Task<Void> task = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
-                FileSystem fs = hadoopConf.getFileSystem();
-                String output = "/test/output_"+date.getValue()+ "_chart1/part-r-00000" ;
-                Path outputFile = new Path(output);
-                FSDataInputStream inputStream = fs.open(outputFile);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
+            protected Void call() throws IOException {
+                Platform.runLater(() -> {
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setInitialFileName("output_"+date.getValue()+".csv");
+                    // Set an extension filter for text files
+                    fileChooser.getExtensionFilters().add(
+                            new FileChooser.ExtensionFilter("csv Files", "*.csv")
+                    );
+                    File file = fileChooser.showSaveDialog(getPrimaryStage());
+                    System.out.println("1");
 
-                while ((line = reader.readLine()) != null) {
-                    String[] tokens = line.split("\t");
-                    System.out.println(line);
-                }
-                reader.close();
-                inputStream.close();
+                    FileSystem fs = hadoopConf.getFileSystem();
+                    String output = "/test/output_"+date.getValue()+ "_chart1/part-r-00000";
+
+                    Path outputFile = new Path(output);
+                    FSDataInputStream inputStream = null;
+                    try {
+                        inputStream = fs.open(outputFile);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    String line;
+                    FileWriter csvWriter = null;
+                    try {
+                        csvWriter = new FileWriter(file.getAbsolutePath());
+                        csvWriter.append("issues,count").append("\n");
+                        while ((line = reader.readLine()) != null) {
+                            String[] tokens = line.split("\t");
+                            csvWriter.append(tokens[0]).append(",").append(tokens[1]).append("\n");;
+                            System.out.println(line);
+                        }
+                        System.out.println("CSV file created successfully: " + file.getAbsolutePath());
+                        csvWriter.flush();
+                        csvWriter.close();
+                        reader.close();
+                        inputStream.close();
+                    } catch (IOException e) {
+                        System.out.println("couldn't save file: " + file.getAbsolutePath());
+
+                    }
+                });
+
+
+
 
                 return null;
             }
         };
         task.setOnSucceeded(Event ->{
-            System.out.println("finished");
+                System.out.println("finished running thr tread");
+        });
+        task.setOnRunning(Event ->{
+                System.out.println("export started");
         });
 
         Thread thread = new Thread(task);
