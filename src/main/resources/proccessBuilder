@@ -1,0 +1,44 @@
+ String wslCommand = "wsl";
+        String hadoopCommand = "/usr/local/hadoop/bin/hadoop";  // Updated path
+        String jarPath = "/mnt/c/Users/mehdi/Desktop/MY_FILES/RealMapreduce/target/RealMapreduce-1.0-SNAPSHOT.jar";
+        String mainClass = "org.example.Main";
+        String jobName = "testjob2";
+
+        try {
+            // Create a ProcessBuilder for the WSL command
+            ProcessBuilder processBuilder = new ProcessBuilder(
+                    wslCommand,
+                    hadoopCommand,
+                    "jar",
+                    jarPath,
+                    mainClass,
+                    jobName
+            );
+
+            // Set the working directory if needed (leave null if not applicable)
+            processBuilder.directory(null);
+
+            // Start the process
+            Process process = processBuilder.start();
+            System.out.println("Job is running...");
+
+            // Capture the process output (standard output)
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            // Capture the process errors (standard error)
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            while ((line = errorReader.readLine()) != null) {
+                System.err.println(line);
+            }
+
+            // Wait for the process to complete
+            int exitCode = process.waitFor();
+            System.out.println("Process exited with code: " + exitCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }

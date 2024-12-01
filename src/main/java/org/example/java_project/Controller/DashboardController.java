@@ -1,6 +1,4 @@
 package org.example.java_project.Controller;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -8,7 +6,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -47,7 +44,7 @@ public class DashboardController implements Initializable {
     private Pane pnlOrders;
 
     @FXML
-    private Pane pnlOverview;
+    private VBox pnlOverview;
 
     @FXML
     private Pane pnlMenus;
@@ -55,33 +52,7 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Node[] nodes = new Node[10];
-    /*    try {
-            nodes[0] = FXMLLoader.load(getClass().getResource("../Dashboard.fxml"));
-            pnItems.getChildren().add(nodes[0]);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-*/
-        for (int i = 0; i < nodes.length; i++) {
-            try {
 
-                final int j = i;
-                nodes[i] = FXMLLoader.load(getClass().getResource("../Item.fxml"));
-
-                //give the items some effect
-
-                nodes[i].setOnMouseEntered(event -> {
-                    nodes[j].setStyle("-fx-background-color : #0A0E3F");
-                });
-                nodes[i].setOnMouseExited(event -> {
-                    nodes[j].setStyle("-fx-background-color : #02030A");
-                });
-                pnItems.getChildren().add(nodes[i]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
     }
 
@@ -92,7 +63,7 @@ public class DashboardController implements Initializable {
             try {
                 top3job.setStyle("-fx-background-color : #02030A");
                 top3job.toFront();
-                Node node = FXMLLoader.load(getClass().getResource("../Top3job.fxml"));
+                Node node = FXMLLoader.load(getClass().getResource("../Barchar/Top3job.fxml"));
                 top3job.getChildren().add(node);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -112,6 +83,17 @@ public class DashboardController implements Initializable {
                 throw new RuntimeException(e);
             }
 
+        }
+        @FXML
+        void home (){
+            /*pnlOverview.getChildren().clear();*/
+       /*     try {*/
+            pnlOverview.toFront();
+              /*  Node node = FXMLLoader.load(getClass().getResource("../Barchar/Top3job.fxml"));
+                pnlOverview.getChildren().add(node);*/
+            /*} catch (IOException e) {
+                throw new RuntimeException(e);
+            }*/
         }
 
     }

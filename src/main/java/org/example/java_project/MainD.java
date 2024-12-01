@@ -8,9 +8,10 @@ import javafx.stage.Stage;
 
 public class MainD extends Application {
     private double x, y;
-
+    private static Stage primaryStage;
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
         primaryStage.setScene(new Scene(root));
 
@@ -29,6 +30,10 @@ public class MainD extends Application {
         });
 
         primaryStage.show();
+    }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public static void main(String[] args) {
