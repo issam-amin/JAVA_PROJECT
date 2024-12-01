@@ -1,4 +1,5 @@
 package org.example.java_project.Controller;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,6 +12,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
+    @FXML
+    private VBox view;
+    @FXML
+    private VBox typeIssue;
     @FXML
     private VBox pnItems = null;
     @FXML
@@ -46,29 +51,14 @@ public class DashboardController implements Initializable {
     @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Node[] nodes = new Node[10];
-    /*    try {
-            nodes[0] = FXMLLoader.load(getClass().getResource("../Dashboard.fxml"));
-            pnItems.getChildren().add(nodes[0]);
+        view.getChildren().clear();
+        try {
+            view.setStyle("-fx-background-color : #02030A");
+            view.toFront();
+            Node node = FXMLLoader.load(getClass().getResource("../Overview.fxml"));
+            view.getChildren().add(node);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-*/
-        for (int i = 0; i < nodes.length; i++) {
-            try {
-                final int j = i;
-                nodes[i] = FXMLLoader.load(getClass().getResource("../Item.fxml"));
-                //give the items some effect
-                nodes[i].setOnMouseEntered(event -> {
-                    nodes[j].setStyle("-fx-background-color : #0A0E3F");
-                });
-                nodes[i].setOnMouseExited(event -> {
-                    nodes[j].setStyle("-fx-background-color : #02030A");
-                });
-                pnItems.getChildren().add(nodes[i]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -89,17 +79,29 @@ public class DashboardController implements Initializable {
 
         @FXML
         void PieChart() {
-            pnlMenus.getChildren().clear();
+
+            typeIssue.getChildren().clear();
             try {
-                pnlMenus.setStyle("-fx-background-color : #53639F");
-                pnlMenus.toFront();
+                typeIssue.setStyle("-fx-background-color : #53639F");
+                typeIssue.toFront();
                 Node RecType = FXMLLoader.load(getClass().getResource("../PieChart.fxml"));
-                pnlMenus.getChildren().add(RecType);
+                typeIssue.getChildren().add(RecType);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
         }
 
-
+@FXML
+     void overview() {
+    view.getChildren().clear();
+        try {
+            view.setStyle("-fx-background-color : #02030A");
+            view.toFront();
+            Node node = FXMLLoader.load(getClass().getResource("../Overview.fxml"));
+            view.getChildren().add(node);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+}

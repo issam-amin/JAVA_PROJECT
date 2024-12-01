@@ -39,7 +39,7 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         this.jobTime = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.currentDate = LocalDate.now().format(formatter);
-        this.input = "/test/input" +  "/data.csv";
+        this.input = "/test/input" + "/data.csv";
         this.output = "/test/output_" +currentDate+"_"+ jobName;
     }
 
@@ -47,33 +47,33 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         fs = hadoopConf.getFileSystem();
         boolean output_day = false;
 
-            output_day = fs.exists(new Path(output));
+        output_day = fs.exists(new Path(output));
 
-            switch (JobType) {
-                case NORMAL: {
-                    try {
-                        if (output_day) {
-                            System.out.println("kayn output");
-                            return FormatReturn();
+        switch (JobType) {
+            case NORMAL: {
+                try {
+                    if (output_day) {
+                        System.out.println("kayn output");
+                        return FormatReturn();
 
-                        }else
-                        {
-                            return RunJob("src/main/resources/data.csv", output, input, jobName);
-
-                        }
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                case REFRESH: {
-                    try {
+                    }else
+                    {
                         return RunJob("src/main/resources/data.csv", output, input, jobName);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
 
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             }
+            case REFRESH: {
+                try {
+                    return RunJob("src/main/resources/data.csv", output, input, jobName);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        }
         return null;
     }
 
@@ -148,7 +148,6 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         fs.copyFromLocalFile(localPath, hdfsFilePath);
         System.out.println("File uploaded to HDFS: " + hdfsFilePath);
 
-        // Check if the output path exists, and delete if it does
         if (fs.exists(outputPath)) {
             if (fs.delete(outputPath, true)) {
                 System.out.println("Output path deleted successfully!");
@@ -158,7 +157,6 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
             }
         }
 
-        // Set input and output paths for the job
         FileInputFormat.addInputPath(job, hdfsFilePath);
         FileOutputFormat.setOutputPath(job, outputPath);
 

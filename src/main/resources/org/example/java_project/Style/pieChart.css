@@ -28,3 +28,6 @@
     -fx-padding: 2px;
     -fx-background-radius: 3px;
 }
+.label{
+    -fx-text-fill: #e7e5e5;
+}

@@ -72,6 +72,28 @@ public class DbConnection {
 
             return null;
     }
+    public static String getClient(String id ){
+        Connection connection = getConnection();
+        HashMap<String, String> client = new HashMap<>();
+
+        String sql = "SELECT * FROM client WHERE  id = "+id ; // Query to extract table data
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                    String nom = resultSet.getString("Nom");
+                    String prenom = resultSet.getString("Prenom");
+                    // Return concatenated result
+                    return nom + " " + prenom;
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
 
     public  static void close() {
         Connection con = getConnection();
