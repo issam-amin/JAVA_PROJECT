@@ -39,7 +39,7 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         this.jobTime = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.currentDate = LocalDate.now().format(formatter);
-        this.input = "/test/input" + "/data.csv";
+        this.input = "/test/input/data.csv";
         this.output = "/test/output_" +currentDate+"_"+ jobName;
     }
 
