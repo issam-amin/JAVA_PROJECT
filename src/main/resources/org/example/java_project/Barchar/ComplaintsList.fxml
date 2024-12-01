@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="751.0" stylesheets="@../Style/barChart.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23">
+   <children>
+      <HBox fx:id="itemC1" alignment="CENTER" prefHeight="50.0" prefWidth="895.0" spacing="80.0" style="-fx-background-color: #02030A; -fx-background-radius: 5; -fx-background-insets: 0;">
+         <children>
+            <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons8_GPS_Antenna_64px_1.png" />
+               </image>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </ImageView>
+            <Label prefWidth="117.0" style="-fx-font-weight: bold;" text="UserId" textFill="#b7c3d7" />
+            <Label prefWidth="85.0" style="-fx-font-weight: bold;" text="Description" textFill="#b7c3d7">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <Label prefWidth="62.0" style="-fx-font-weight: bold;" text="Date" textFill="#b7c3d7">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <Label prefHeight="17.0" prefWidth="43.0" style="-fx-font-weight: bold;" text="Status" textFill="#b7c3d7">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+         </children>
+         <effect>
+            <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
+         </effect>
+      </HBox>
+      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="353.0" prefWidth="1122.0" vbarPolicy="NEVER">
+         <content>
+            <VBox fx:id="pnItems" alignment="TOP_CENTER" prefHeight="354.0" prefWidth="876.0" style="-fx-background-color: #02030A;">
+               <HBox fx:id="itemC" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="53.0" prefWidth="895.0" spacing="80.0" stylesheets="@../Style/barChart.css">
+                  <children>
+                     <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../images/icons8_GPS_Antenna_64px_1.png" />
+                        </image>
+                        <HBox.margin>
+                           <Insets left="10.0" />
+                        </HBox.margin>
+                     </ImageView>
+                     <Label fx:id="id" prefHeight="17.0" prefWidth="117.0" text="KeepToo" textFill="#b7c3d7" HBox.hgrow="ALWAYS" />
+                     <Label fx:id="count" prefHeight="17.0" prefWidth="85.0" text="JFK" textFill="#b7c3d7">
+                        <HBox.margin>
+                           <Insets />
+                        </HBox.margin>
+                     </Label>
+                     <Label fx:id="countDate" text="10/11/2018" textFill="#b7c3d7">
+                        <HBox.margin>
+                           <Insets />
+                        </HBox.margin>
+                     </Label>
+                     <Label fx:id="percentage" prefHeight="17.0" prefWidth="43.0" text="\$200" textFill="#b7c3d7">
+                        <HBox.margin>
+                           <Insets />
+                        </HBox.margin>
+                     </Label>
+                  </children>
+                  <effect>
+                     <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
+                  </effect>
+               </HBox>    </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</VBox>

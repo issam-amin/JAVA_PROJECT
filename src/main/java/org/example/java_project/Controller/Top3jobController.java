@@ -1,41 +1,57 @@
 package org.example.java_project.Controller;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import org.apache.hadoop.fs.Path;
+import org.example.java_project.MainD;
 import org.example.java_project.Service.JobType;
 import org.example.java_project.Service.OldTop3job;
 import org.example.java_project.Service.Top3Job;
+import org.example.java_project.Service.hadoopConf;
 import org.example.java_project.Util.Pair;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import org.controlsfx.control.Notifications;
 
 
 
 public class Top3jobController implements Initializable {
 
     BarChart<String, Number>  barChart;
-    FileSystem fileSystem ;
 
     @FXML
     DatePicker date;
-
+    @FXML
+    VBox List;
     @FXML
     protected VBox pane;
     @FXML
@@ -43,8 +59,9 @@ public class Top3jobController implements Initializable {
     @FXML
     VBox pnItems ;
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        runjob("chart1" , JobType.NORMAL);
+    public void initialize(  URL location, ResourceBundle resources ) {
+            date.setValue(LocalDate.now());
+            runjob("chart1" , JobType.NORMAL);
     }
 
     @FXML
@@ -205,7 +222,9 @@ public class Top3jobController implements Initializable {
         });
 
         job.setOnFailed(workerStateEvent -> {
-            System.out.println("1111");
+             showCustomPopup(MainD.getPrimaryStage());
+             state.setText("");
+            this.date.setValue(LocalDate.now());
         });
 
 
@@ -229,12 +248,6 @@ public class Top3jobController implements Initializable {
         for (Pair pair : IssusCount) {
             try {
                 Node node =  FXMLLoader.load(getClass().getResource("../Item.fxml"));
-                node.setOnMouseEntered(event -> {
-                    node.setStyle("-fx-background-color : #0A0E3F");
-                });
-                node.setOnMouseExited(event -> {
-                    node.setStyle("-fx-background-color : #02030A");
-                });
 
                 Parent parentNode = (Parent) node;
 
@@ -256,6 +269,27 @@ public class Top3jobController implements Initializable {
                     label.setText(String.format("%.2f%%", pair.getValue() * 1.0 /some * 100));
                 }
 
+                final Button Action = (Button) parentNode.lookup("#ActionButton");
+                Action.setOnMouseClicked(event ->{
+                    Stage newStage = new Stage();
+                    newStage.setTitle("New Stage");
+                    Parent newRoot = null;
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Barchar/ComplaintsList.fxml"));
+                        complaintsLIstController controller =  new complaintsLIstController();
+                        controller.getinfo("sss");
+                        loader.setController(controller);
+                        newRoot = loader.load();
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Scene newScene = new Scene(newRoot);
+                    newStage.setScene(newScene);
+                    newStage.show(); // Show the new stage
+                });
+
+
                 pnItems.getChildren().add(node);
 
             } catch (IOException e) {
@@ -264,54 +298,59 @@ public class Top3jobController implements Initializable {
 
         }
 
-        /*Node[] nodes = new Node[10];
+    }
 
 
-        for (int i = 0; i < nodes.length; i++) {
+    private void showCustomPopup(Stage parentStage) {
+        // Create a new Stage for the pop-up
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL); // Blocks interaction with parent stage
+        popupStage.initOwner(parentStage); // Sets the owner for the pop-up
 
-            try {
-                final int j = i;
-                nodes[i] = FXMLLoader.load(getClass().getResource("../Item.fxml"));
+        // Design the content of the pop-up
+        Text message = new Text("This is a custom pop-up!");
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> popupStage.close());
 
-                //give the items some effect
-                nodes[i].setOnMouseEntered(event -> {
-                    nodes[j].setStyle("-fx-background-color : #0A0E3F");
-                });
-                nodes[i].setOnMouseExited(event -> {
-                    nodes[j].setStyle("-fx-background-color : #02030A");
-                });
+        VBox popupLayout = new VBox(10, message, closeButton);
+        popupLayout.setAlignment(Pos.CENTER);
+        popupLayout.setStyle("-fx-padding: 20; -fx-background-color: lightblue; -fx-border-color: darkblue; -fx-border-width: 2;");
 
-                if (nodes[i] instanceof Parent) {
-                    Parent parentNode = (Parent) nodes[i];
-                    // Access all children
-                    ObservableList<Node> children = parentNode.getChildrenUnmodifiable();
-                    for (Node child : children) {
-                        System.out.println("Child: " + child);
-                    }
+        Scene popupScene = new Scene(popupLayout, 300, 150);
+        popupStage.setScene(popupScene);
+        popupStage.setTitle("Pop-Up");
+        popupStage.showAndWait(); // Makes it a blocking dialog
+    }
 
-                    // Lookup specific child nodes by fx:id
-                    Label label = (Label) parentNode.lookup("#id");
-                    if (label != null) {
-                        label.setText("Label " + i);
-                    }
+    @FXML
+    void exportJob(){
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                FileSystem fs = hadoopConf.getFileSystem();
+                String output = "/test/output_"+date.getValue()+ "_chart1/part-r-00000" ;
+                Path outputFile = new Path(output);
+                FSDataInputStream inputStream = fs.open(outputFile);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
 
-                   *//* Button button = (Button) parentNode.lookup("#buttonId");
-                    if (button != null) {
-                        button.setOnAction(event -> System.out.println("Button " + i + " clicked!"));
-                    }*//*
+                while ((line = reader.readLine()) != null) {
+                    String[] tokens = line.split("\t");
+                    System.out.println(line);
                 }
+                reader.close();
+                inputStream.close();
 
-                pnItems.getChildren().add(nodes[i]);
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
+                return null;
             }
-        }
-*/
+        };
+        task.setOnSucceeded(Event ->{
+            System.out.println("finished");
+        });
 
-
-
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
 
 
 

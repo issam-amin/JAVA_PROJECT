@@ -44,3 +44,52 @@
 #date{
     -fx-background-color:#10165F ;
 }
+
+#ActionButton{
+    -fx-border-color:  #2A73FF;
+    -fx-border-radius : 30;
+    -fx-background-color : transparent;
+    -fx-font-weight: 500;
+    -fx-text-fill: white;
+}
+#ActionButton:hover{
+    -fx-background-color : #2A73FF;
+}
+
+#itemC{
+    -fx-background-color: #02030A;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
+}
+#itemC:hover{
+    -fx-background-color : #0A0E3F;
+}
+
+.scroll-pane {
+    -fx-background-color: #02030A;
+}
+
+
+/*
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #10165F;
+    -fx-background-radius: 5em;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: black;
+}
+*/
+
+/*
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}*/
