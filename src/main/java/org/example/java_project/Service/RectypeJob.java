@@ -2,7 +2,6 @@ package org.example.java_project.Service;
 
 
 import javafx.concurrent.Task;
-
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -28,32 +27,56 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
     private final String input;
     private final String output;
     private static String jobName;
-
+    static FileSystem fs ;
     private final String currentDate;
     private LocalTime jobTime;
+    private  JobType JobType;
 
 
-    public RectypeJob(String jobName) {
+    public RectypeJob(String jobName, JobType JobType) {
+        this.JobType = JobType;
         this.jobName = jobName;
         this.jobTime = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.currentDate = LocalDate.now().format(formatter);
-       // System.out.println(currentDate);
-        this.input = "/test/input_" + jobName + "/data.csv";
+        this.input = "/test/input" + "/data.csv";
         this.output = "/test/output_" +currentDate+"_"+ jobName;
     }
 
-    public HashMap<String, Integer> call() {
+    public HashMap<String, Integer> call() throws IOException {
+        fs = hadoopConf.getFileSystem();
+        boolean output_day = false;
 
-        boolean exportRes = DbConnection.export("rec");
-      //  System.out.println(exportRes);
-        try {
+        output_day = fs.exists(new Path(output));
 
-            return RunJob("src/main/resources/data.csv", output, input, jobName);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        switch (JobType) {
+            case NORMAL: {
+                try {
+                    if (output_day) {
+                        System.out.println("kayn output");
+                        return FormatReturn();
+
+                    }else
+                    {
+                        return RunJob("src/main/resources/data.csv", output, input, jobName);
+
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case REFRESH: {
+                try {
+                    return RunJob("src/main/resources/data.csv", output, input, jobName);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
         }
+        return null;
     }
+
 
     // Map and Reduce classes remain unchanged
     public static class TokenizerMapper extends Mapper<Object, Text, Text, IntWritable> {
@@ -102,13 +125,13 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         }
     }
 
-    protected static HashMap<String, Integer> RunJob(String localFilePath, String outputPathStr, String hdfsFilePathStr,String JobName) throws Exception {
+    protected  HashMap<String, Integer> RunJob(String localFilePath, String outputPathStr, String hdfsFilePathStr,String JobName) throws Exception {
         Path outputPath = new Path(outputPathStr);
         Path hdfsFilePath = new Path(hdfsFilePathStr);
         Path localPath = new Path(localFilePath);
 
         Job job = hadoopConf.getJob(JobName);
-        FileSystem fs = hadoopConf.getFileSystem();
+        fs = hadoopConf.getFileSystem();
 
 
         job.setJarByClass(RectypeJob.class);
@@ -125,7 +148,6 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         fs.copyFromLocalFile(localPath, hdfsFilePath);
         System.out.println("File uploaded to HDFS: " + hdfsFilePath);
 
-        // Check if the output path exists, and delete if it does
         if (fs.exists(outputPath)) {
             if (fs.delete(outputPath, true)) {
                 System.out.println("Output path deleted successfully!");
@@ -135,7 +157,6 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
             }
         }
 
-        // Set input and output paths for the job
         FileInputFormat.addInputPath(job, hdfsFilePath);
         FileOutputFormat.setOutputPath(job, outputPath);
 
@@ -146,15 +167,17 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         }
 
         System.out.println("MapReduce Job Completed. Reading Output...");
-        Path outputFile = new Path(outputPathStr + "/part-r-00000");
+        return FormatReturn();
+
+    }
+    private   HashMap<String, Integer> FormatReturn() throws IOException {
+        Path outputFile = new Path(output + "/part-r-00000");
 
 
         if (!fs.exists(outputFile)) {
             System.err.println("Output file not found!");
             System.exit(-1);
         }
-
-        // Read the output file content
         FSDataInputStream inputStream = fs.open(outputFile);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -170,7 +193,6 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         inputStream.close();
         return statistics;
     }
-
 
 
 

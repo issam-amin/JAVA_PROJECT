@@ -9,7 +9,7 @@ public class DbConnection {
     static final Connection connection;
     static {
         try {
-            connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/claims", "root", "PHW#84#jeor");
+            connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
         }catch  (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -71,6 +71,28 @@ public class DbConnection {
             }
 
             return null;
+    }
+    public static String getClient(String id ){
+        Connection connection = getConnection();
+        HashMap<String, String> client = new HashMap<>();
+
+        String sql = "SELECT * FROM client WHERE  id = "+id ; // Query to extract table data
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                    String nom = resultSet.getString("Nom");
+                    String prenom = resultSet.getString("Prenom");
+                    // Return concatenated result
+                    return nom + " " + prenom;
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
     }
 
     public  static void close() {

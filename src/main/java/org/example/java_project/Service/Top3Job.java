@@ -214,7 +214,6 @@ public class Top3Job extends Task<XYChart.Series<String, Number>>  {
                 }
             });
 
-            // Emit sorted key-value pairs
             for (Pair pair : keyValueList) {
                 String Type = DbConnection.getType(pair.getKey());
                 context.write(new Text(Type), new IntWritable(pair.getValue()));
