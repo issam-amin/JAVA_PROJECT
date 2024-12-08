@@ -42,8 +42,6 @@ public class DbConnection {
             System.out.println("CSV file created successfully: " + csvFilePath);
             return  true;
 
-            /*WordCount.RunJob("src/main/resources/data.csv","/test/output","/test/input/data.csv");*/
-
         } catch (IOException e) {
             System.err.println("Error writing to CSV file: " + e.getMessage());
             return false;

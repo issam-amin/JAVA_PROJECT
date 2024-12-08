@@ -25,6 +25,7 @@ public class OldTop3job extends Task<XYChart.Series<String, Number>> {
     public OldTop3job(String jobName  , LocalDate date){
         this.JobName = jobName;
         this.output = "/test/output_"+date.toString()+"_"+JobName;
+        System.out.println(output);
     }
 
     @Override
