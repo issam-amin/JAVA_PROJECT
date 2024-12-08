@@ -39,12 +39,16 @@ public class Top3Job extends Task<XYChart.Series<String, Number>>  {
 
     @Override
     public XYChart.Series<String, Number> call() throws IOException {
+        System.out.println(123345);
         fs = hadoopConf.getFileSystem();
+        System.out.println(123345);
         boolean tuday_output = false;
         try {
              tuday_output = fs.exists(new Path(output));
+            System.out.println(123345);
         } catch (IOException e) {
             throw new RuntimeException(e);
+
         }
 
         switch (jobType) {

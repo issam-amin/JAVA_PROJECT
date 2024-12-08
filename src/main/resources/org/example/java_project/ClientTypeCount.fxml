@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" prefHeight="575.0" prefWidth="771.0" spacing="10" style="-fx-padding: 20;" stylesheets="@Style/table.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.ClientTypeCountController">
+    <!-- Title -->
+    <Label styleClass="header" stylesheets="@Style/table.css" text="Customer Issues" />
+
+    <!-- Search Bar -->
+    <TextField fx:id="searchField" promptText="Search by customer or issue" styleClass="search-bar" stylesheets="@Style/table.css" />
+
+    <!-- TableView for data -->
+    <TableView fx:id="tableView" prefHeight="400" prefWidth="600" styleClass="table-container" stylesheets="@Style/table.css">
+        <columns>
+            <TableColumn fx:id="customerColumn" prefWidth="247.0" text="Customer Name" />
+            <TableColumn fx:id="issueColumn" prefWidth="234.0" text="Issue Type" />
+            <TableColumn fx:id="scoreColumn" prefWidth="250.0" text="Number of Issues" />
+        </columns>
+    </TableView>
+
+    <!-- Refresh Button -->
+    <Button fx:id="refreshButton" onAction="#refreshData" styleClass="button" stylesheets="@Style/table.css" text="Refresh" />
+</VBox>

@@ -5,13 +5,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.example.java_project.Service.JobType;
+import org.example.java_project.Service.RectypeJob;
+import org.example.java_project.Service.UniqueUserCount;
+import org.example.java_project.Service.clientTypeJob;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
+
+import static org.example.java_project.Controller.LoginController.loggedInUser;
 
 public class DashboardController implements Initializable {
     @FXML
@@ -54,13 +62,27 @@ public class DashboardController implements Initializable {
 
     @FXML
     private Pane pnlMenus;
+    private String loggedInUser;
+
+
     @FXML
+    public void setLoggedInUser(String username) {
+        this.loggedInUser = username;
+        initializeView();  // Call the method to initialize the view with the user data
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        /*if (loggedInUser != null) {
+
+        }*/
+        initializeView();
+    }
+
+    private void initializeView() {
         view.getChildren().clear();
         try {
-            view.setStyle("-fx-background-color : #02030A");
+            view.setStyle("-fx-background-color: #02030A");
             view.toFront();
             Node node = FXMLLoader.load(getClass().getResource("../Overview.fxml"));
             view.getChildren().add(node);
@@ -68,6 +90,7 @@ public class DashboardController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
 
 
         @FXML
@@ -98,10 +121,22 @@ public class DashboardController implements Initializable {
             }
 
         }
+     /*   @FXML
+        void clientType() {
+            typeIssue.getChildren().clear();
+            try {
+                typeIssue.setStyle("-fx-background-color : #53639F");
+                typeIssue.toFront();
+                Node RecType = FXMLLoader.load(getClass().getResource("../ClientTypeCountController.fxml"));
+                typeIssue.getChildren().add(RecType);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }*/
 
 @FXML
      void overview() {
-    view.getChildren().clear();
+        view.getChildren().clear();
         try {
             view.setStyle("-fx-background-color : #02030A");
             view.toFront();
@@ -111,4 +146,35 @@ public class DashboardController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+    @FXML
+    void ClientTypeCount() {
+        typeIssue.getChildren().clear();
+        try {
+            typeIssue.setStyle("-fx-background-color : #53639F");
+            typeIssue.toFront();
+            Node node = FXMLLoader.load(getClass().getResource("../ClientTypeCount.fxml"));
+            typeIssue.getChildren().add(node);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    @FXML
+    void UniqueUserCount() {
+        typeIssue.getChildren().clear();
+        try {
+            typeIssue.setStyle("-fx-background-color : #53639F");
+            typeIssue.toFront();
+            Node node = FXMLLoader.load(getClass().getResource("../UniqueUserCount.fxml"));
+            typeIssue.getChildren().add(node);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
 }

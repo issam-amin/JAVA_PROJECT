@@ -9,7 +9,7 @@ public class DbConnection {
     static final Connection connection;
     static {
         try {
-            connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/claims", "root", "PHW#84#jeor");
+            connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
         }catch  (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -93,6 +93,22 @@ public class DbConnection {
         }
 
         return null;
+    }
+
+    public static boolean validateLogin(String username, String password) {
+        Connection connection = getConnection();
+        String query = "SELECT * FROM admin_user WHERE username = ? AND password = ?";
+        try (
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public  static void close() {

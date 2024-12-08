@@ -4,15 +4,16 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -20,8 +21,6 @@ import javafx.stage.Stage;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.example.java_project.Service.AllJobs;
-import org.example.java_project.Service.ComplaintService;
 import org.example.java_project.Service.DbConnection;
 import org.example.java_project.Service.hadoopConf;
 
@@ -34,9 +33,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.example.java_project.Service.ComplaintService.getComplainte;
 
@@ -44,6 +41,8 @@ public class Controller {
     static FileSystem fs ;
     public HBox itemC1;
     public HBox itemC;
+    public TextField search_bar;
+    public TextField limitField;
 
     @FXML
     private Button activeButton;
@@ -62,6 +61,7 @@ public class Controller {
     private final StringProperty IssueValue = new SimpleStringProperty("None");
     private final StringProperty CompletedIssuesValue = new SimpleStringProperty("None");
     private final StringProperty PendingIssuesValue = new SimpleStringProperty("None");
+
     @FXML
     private void initialize() {
         getAllIssues();
@@ -72,209 +72,179 @@ public class Controller {
         CompletedIssues.textProperty().bind(CompletedIssuesValue);
         getStatus("pending");
         PendingIssues.textProperty().bind(PendingIssuesValue);
-        listComplaints();
+        listComplaints(0);
+
+        // Add listener to search bar
+        search_bar.textProperty().addListener((observable, oldValue, newValue) -> listComplaints(0));
     }
+
     public void getAllIssues() {
-        try {
+        Task<Integer> task = new Task<>() {
+            @Override
+            protected Integer call() {
+                int sum = 0;
+                try {
+                    fs = hadoopConf.getFileSystem();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    String currentDate = LocalDate.now().format(formatter);
+                    String outputFilePath = "/test/output_" + currentDate + "_chart1/part-r-00000";
+                    Path path = new Path(outputFilePath);
 
-            fs = hadoopConf.getFileSystem();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String currentDate = LocalDate.now().format(formatter);
-            String outputFilePath = "/test/output_" + currentDate + "_chart1/part-r-00000";
-
-            Path path = new Path(outputFilePath);
-
-            int sum = 0;
-
-            if (fs.exists(path)) {
-                FSDataInputStream inputStream = fs.open(path);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split("\t");
-                    if (parts.length == 2) {
-                        try {
-                            sum += Double.parseDouble(parts[1]);
-                        } catch (NumberFormatException e) {
-                            System.err.println("Invalid number: " + parts[1]);
+                    if (fs.exists(path)) {
+                        FSDataInputStream inputStream = fs.open(path);
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            String[] parts = line.split("\t");
+                            if (parts.length == 2) {
+                                try {
+                                    sum += Double.parseDouble(parts[1]);
+                                } catch (NumberFormatException e) {
+                                    System.err.println("Invalid number: " + parts[1]);
+                                }
+                            }
                         }
+                        reader.close();
+                        inputStream.close();
+                    } else {
+                        System.out.println("Output file for the current day does not exist.");
                     }
+                    fs.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                //System.out.println(sum);
-                reader.close();
-                inputStream.close();
-            } else {
-                System.out.println("Output file for the current day does not exist.");
+                return sum;
             }
+        };
 
-            fs.close();
-            IssueValue.set(String.valueOf(sum));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        task.setOnSucceeded(event -> IssueValue.set(task.getValue().toString()));
+        new Thread(task).start();
     }
 
     private void getAllClients() {
-        Connection connection = DbConnection.getConnection();
-        try {
-            String sql = "SELECT COUNT(*) FROM client";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                ClientValue.set(resultSet.getString("COUNT(*)"));
+        Task<String> task = new Task<>() {
+            @Override
+            protected String call() {
+                String clientCount = "0";
+                Connection connection = DbConnection.getConnection();
+                try {
+                    String sql = "SELECT COUNT(*) FROM client";
+                    Statement statement = connection.createStatement();
+                    ResultSet resultSet = statement.executeQuery(sql);
+                    if (resultSet.next()) {
+                        clientCount = resultSet.getString("COUNT(*)");
+                    }
+                } catch (SQLException ignored) {
+                }
+                return clientCount;
             }
-        } catch (SQLException ignored) {
-        }
+        };
 
+        task.setOnSucceeded(event -> ClientValue.set(task.getValue()));
+        new Thread(task).start();
     }
 
-    public void getStatus(String Status) {
-        try {
-            fs = hadoopConf.getFileSystem();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String currentDate = LocalDate.now().format(formatter);
-            String outputFilePath = "/test/output_" + currentDate + "_chart2/part-r-00000";
-            System.out.println(outputFilePath);
-            Path path = new Path(outputFilePath);
+    public void getStatus(String status) {
+        Task<Integer> task = new Task<>() {
+            @Override
+            protected Integer call() {
+                int sum = 0;
+                try {
+                    fs = hadoopConf.getFileSystem();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    String currentDate = LocalDate.now().format(formatter);
+                    String outputFilePath = "/test/output_" + currentDate + "_chart2/part-r-00000";
+                    Path path = new Path(outputFilePath);
 
-            int sum = 0;
-
-            if (fs.exists(path)) {
-                FSDataInputStream inputStream = fs.open(path);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-
-                    String[] parts = line.split("\t");
-                    //    System.out.println( parts[0]);
-                    if (parts.length == 2 && parts[0].equals(Status)) {
-                        try {
-                            sum += Double.parseDouble(parts[1]);
-                        } catch (NumberFormatException e) {
-                            System.err.println("Invalid number: " + parts[1]);
+                    if (fs.exists(path)) {
+                        FSDataInputStream inputStream = fs.open(path);
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            String[] parts = line.split("\t");
+                            if (parts.length == 2 && parts[0].equals(status)) {
+                                try {
+                                    sum += Double.parseDouble(parts[1]);
+                                } catch (NumberFormatException e) {
+                                    System.err.println("Invalid number: " + parts[1]);
+                                }
+                            }
                         }
+                        reader.close();
+                        inputStream.close();
+                    } else {
+                        System.out.println("Output file for the current day does not exist.");
                     }
+                    fs.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                reader.close();
-                inputStream.close();
-            } else {
-                System.out.println("Output file for the current day does not exist.");
+                return sum;
             }
+        };
 
-            fs.close();
-            if (Status.equals("completed"))
-                CompletedIssuesValue.set(String.valueOf(sum));
-            else
-                PendingIssuesValue.set(String.valueOf(sum));
-            System.out.println(sum);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        task.setOnSucceeded(event -> {
+            if (status.equals("completed")) {
+                CompletedIssuesValue.set(task.getValue().toString());
+            } else {
+                PendingIssuesValue.set(task.getValue().toString());
+            }
+        });
+        new Thread(task).start();
     }
 
-
-    /*public List<HashMap<String, String>> getComplaints() {
-        List<HashMap<String, String>> complaintsList = new ArrayList<>();
-        try {
-            fs = hadoopConf.getFileSystem();
-            String inputFile = "/test/input/data.csv";
-            Path path = new Path(inputFile);
-
-            if (fs.exists(path)) {
-                FSDataInputStream inputStream = fs.open(path);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(",");
-
-                    if (parts.length >= 5) { // Ensure the line has at least 5 fields
-                        String field1 = parts[1]; // "7"
-                        String field2 = parts[2]; // "20"
-                        String field3 = parts[3]; // "Sample reclamation text for..."
-                        String field4 = parts[4].split(" ")[0]; // Extract only the date from "2024-09-20 17:18:48"
-
-                        String type = DbConnection.getType(field1); // Lookup type
-                        String client = DbConnection.getClient(field2); // Lookup client
-
-                        // Create a dictionary for the current complaint
-                        HashMap<String, String> complaint = new HashMap<>();
-                        complaint.put("Type", type);
-                        complaint.put("Client", client);
-                        complaint.put("Text", field3);
-                        complaint.put("Date", field4);
-
-                        // Add to the list
-                        complaintsList.add(complaint);
-                    }
-                }
-
-                reader.close();
-                inputStream.close();
-            } else {
-                System.out.println("Input file does not exist.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return complaintsList; // Return the list of complaints
-    }*/
-
-    void listComplaints() {
+    /*void listComplaints() {
         pnItems.getChildren().clear();
 
         Task<Void> task = new Task<>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 try {
                     ResultSet complaints = getComplainte();
+                    String searchTerm = search_bar.getText().toLowerCase();
+
                     while (complaints.next()) {
-                        Node node = FXMLLoader.load(getClass().getResource("../MyItems.fxml"));
+                        String client = complaints.getString("Client").toLowerCase();
+                        String recText = complaints.getString("Rec_Text").toLowerCase();
+                        String dateReclamation = complaints.getString("date_Reclamation").toLowerCase();
 
-                        node.setOnMouseEntered(event -> node.setStyle("-fx-background-color: #0A0E3F"));
-                        node.setOnMouseExited(event -> node.setStyle("-fx-background-color: #02030A"));
+                        // Check if the search term matches the client name, rec text, or any part of the date
+                        if (client.contains(searchTerm) ||
+                                recText.contains(searchTerm) ||
+                                dateReclamation.contains(searchTerm)) {
+                            Node node = FXMLLoader.load(getClass().getResource("../MyItems.fxml"));
 
-                        // Extract data from the ResultSet
-                        String client = complaints.getString("Client");
-                        String recText = complaints.getString("Rec_Text");
-                        String dateReclamation = complaints.getString("date_Reclamation");
+                            node.setOnMouseEntered(event -> node.setStyle("-fx-background-color: #0A0E3F"));
+                            node.setOnMouseExited(event -> node.setStyle("-fx-background-color: #02030A"));
 
-                        // Update the UI on the JavaFX Application Thread
-                        Platform.runLater(() -> {
-                            try {
-                                Label label = (Label) ((Parent) node).lookup("#Client");
-                                if (label != null) {
-                                    label.setText(client);
+                            Platform.runLater(() -> {
+                                try {
+                                    Label label = (Label) ((Parent) node).lookup("#Client");
+                                    if (label != null) {
+                                        label.setText(client);
+                                    }
+
+                                    label = (Label) ((Parent) node).lookup("#Rec_Text");
+                                    if (label != null) {
+                                        label.setText(recText);
+                                    }
+
+                                    label = (Label) ((Parent) node).lookup("#date_Reclamation");
+                                    if (label != null) {
+                                        label.setText(dateReclamation);
+                                    }
+
+                                    Button activeButton = (Button) ((Parent) node).lookup("#activeButton");
+                                    if (activeButton != null) {
+                                        activeButton.setOnAction(event -> openPopupWindow(client, recText, dateReclamation));
+                                    }
+
+                                    pnItems.getChildren().add(node);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-
-                                label = (Label) ((Parent) node).lookup("#Rec_Text");
-                                if (label != null) {
-                                    label.setText(recText);
-                                }
-
-                                label = (Label) ((Parent) node).lookup("#date_Reclamation");
-                                if (label != null) {
-                                    label.setText(dateReclamation);
-                                }
-
-                                Button activeButton = (Button) ((Parent) node).lookup("#activeButton");
-                                if (activeButton != null) {
-                                    activeButton.setOnAction(event -> openPopupWindow(client, recText, dateReclamation));
-                                }
-
-                                // Add the node to the panel
-                                pnItems.getChildren().add(node);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
+                            });
+                        }
                     }
                 } catch (SQLException | IOException e) {
                     e.printStackTrace();
@@ -283,26 +253,103 @@ public class Controller {
             }
         };
 
-        // Run the task in a new thread
         Thread thread = new Thread(task);
-        thread.setDaemon(true); // Ensure the thread stops when the application exits
+        thread.setDaemon(true);
+        thread.start();
+    }*/
+    void listComplaints(int limit) {
+        pnItems.getChildren().clear();
+
+        // If no limit is provided (limit is 0 or negative), set it to 20
+        if (limit <= 0) {
+            limit = 20;
+        }
+
+        int finalLimit = limit;
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    ResultSet complaints = getComplainte();
+                    String searchTerm = search_bar.getText().toLowerCase();
+                    int count = 0; // Counter for the number of complaints displayed
+
+                    while (complaints.next() && (finalLimit == 0 || count < finalLimit)) {
+                        String client = complaints.getString("Client").toLowerCase();
+                        String recText = complaints.getString("Rec_Text").toLowerCase();
+                        String dateReclamation = complaints.getString("date_Reclamation").toLowerCase();
+
+                        // Check if the search term matches the client name, rec text, or any part of the date
+                        if (client.contains(searchTerm) ||
+                                recText.contains(searchTerm) ||
+                                dateReclamation.contains(searchTerm)) {
+                            Node node = FXMLLoader.load(getClass().getResource("../MyItems.fxml"));
+
+                            node.setOnMouseEntered(event -> node.setStyle("-fx-background-color: #0A0E3F"));
+                            node.setOnMouseExited(event -> node.setStyle("-fx-background-color: #02030A"));
+
+                            int finalCount = count;
+                            Platform.runLater(() -> {
+                                try {
+                                    // Get the issue number label and set its value
+                                    Label issueLabel = (Label) ((Parent) node).lookup("#issueNumber");
+                                    if (issueLabel != null) {
+                                        issueLabel.setText(String.valueOf(finalCount + 1)); // Set incrementing issue count
+                                    }
+
+                                    Label label = (Label) ((Parent) node).lookup("#Client");
+                                    if (label != null) {
+                                        label.setText(client);
+                                    }
+
+                                    label = (Label) ((Parent) node).lookup("#Rec_Text");
+                                    if (label != null) {
+                                        label.setText(recText);
+                                    }
+
+                                    label = (Label) ((Parent) node).lookup("#date_Reclamation");
+                                    if (label != null) {
+                                        label.setText(dateReclamation);
+                                    }
+
+                                    Button activeButton = (Button) ((Parent) node).lookup("#activeButton");
+                                    if (activeButton != null) {
+                                        activeButton.setOnAction(event -> openPopupWindow(client, recText, dateReclamation));
+                                    }
+
+                                    pnItems.getChildren().add(node);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+
+                            count++;  // Increment the counter for each complaint displayed
+                        }
+                    }
+                } catch (SQLException | IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
         thread.start();
     }
 
 
+
     private void openPopupWindow(String client, String recText, String dateReclamation) {
         try {
-            // Load the FXML for the popup
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../Popup.fxml"));
             Parent root = loader.load();
 
-            // Get the controller and pass the data
             PopupController controller = loader.getController();
             controller.setMessage(client, recText, dateReclamation);
 
-            // Create a new stage for the popup
             Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL); // Make it modal
+            popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.setTitle("Complaint Details");
             popupStage.setScene(new Scene(root));
             popupStage.showAndWait();
@@ -311,7 +358,17 @@ public class Controller {
         }
     }
 
-
+    @FXML
+    public void applyLimitFilter() {
+        String limitText = limitField.getText();
+        int limit = -1;
+        try {
+            if (!limitText.isEmpty()) {
+                limit = Integer.parseInt(limitText);
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid limit value: " + limitText);
+        }
+        listComplaints(limit);  // Pass the limit to the listComplaints method
+    }
 }
-
-

@@ -3,6 +3,7 @@ package org.example.java_project.Service;
 
 import javafx.concurrent.Task;
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -21,7 +22,11 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RectypeJob extends Task<HashMap<String, Integer>> {
     private final String input;
@@ -134,7 +139,7 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         fs = hadoopConf.getFileSystem();
 
 
-        job.setJarByClass(RectypeJob.class);
+        job.setJarByClass(clientTypeJob.class);
         job.setMapperClass(TokenizerMapper.class);
         job.setReducerClass(IntSumReducer.class);
         job.setOutputKeyClass(Text.class);
@@ -192,6 +197,48 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         reader.close();
         inputStream.close();
         return statistics;
+    }
+
+
+
+
+
+
+    public static List<String> getArchivesFromHDFS() throws IOException {
+        List<String> archiveNames = new ArrayList<>();
+
+
+       fs = hadoopConf.getFileSystem();
+
+
+        Path archivesPath = new Path("/test");
+
+
+        FileStatus[] fileStatuses = fs.listStatus(archivesPath);
+
+        // Define the regex pattern for matching directories (e.g., "output_2024-12-01_chart2")
+        Pattern pattern = Pattern.compile("^output_\\d{4}-\\d{2}-\\d{2}_chart\\d+$");
+
+        // Check if the directory is empty
+        if (fileStatuses == null || fileStatuses.length == 0) {
+            System.out.println("No archives found in the specified directory.");
+        } else {
+            // Iterate through the files and add their names to the list
+            for (FileStatus fileStatus : fileStatuses) {
+                if (fileStatus.isDirectory()) {  // Only consider directories
+                    String dirName = fileStatus.getPath().getName();
+
+                    // Check if the directory name matches the regex pattern
+                    Matcher matcher = pattern.matcher(dirName);
+                    if (matcher.matches()) {
+                        archiveNames.add(dirName);
+                    }
+                }
+            }
+        }
+
+        fs.close();
+        return archiveNames;
     }
 
 

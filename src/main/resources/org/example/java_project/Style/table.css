@@ -1,0 +1,140 @@
+/* General Layout */
+* {
+    -fx-padding: 0;
+    -fx-border-insets: 0;
+    -fx-background-insets: 0;
+}
+
+/* Header */
+.header {
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+    -fx-margin-bottom: 20px;
+    -fx-text-fill: #2C3E50;
+}
+
+/* Search and Table Section */
+.search-bar {
+    -fx-margin-bottom: 20px;
+    -fx-pref-width: 300px;
+    -fx-padding: 10px;
+    -fx-border-color: #051f1c;
+    -fx-border-width: 1px;
+    -fx-border-radius: 20px;
+    -fx-font-size: 16px;
+}
+
+.table-container {
+    -fx-pref-width: 100%;
+    -fx-overflow-x: auto;
+}
+
+.table-container .table-view {
+    -fx-pref-width: 100%;
+    -fx-border-collapse: collapse;
+    -fx-margin-top: 20px;
+}
+
+.table-container .table-view .column-header-background {
+    -fx-background-color: #ECF0F1;
+}
+
+.table-container .table-view .column-header,
+.table-container .table-view .cell {
+    -fx-padding: 15px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-color: #BDC3C7;
+    -fx-border-width: 1px;
+}
+
+.table-container .table-view .cell {
+    -fx-background-color: #ffffff;
+}
+
+/* Un-comment the following if you want alternate row colors */
+/*
+.table-container .table-view .cell:odd {
+    -fx-background-color: #F9F9F9;
+}
+*/
+
+.table-container .table-view .cell:hover {
+    -fx-background-color: #BDC3C7;
+}
+
+/* Button Styles */
+.button {
+    -fx-background-color: #045bb3;
+    -fx-text-fill: white;
+    -fx-border-width: 0;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 10px;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    -fx-background-color: #34495E;
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: #2C3E50;
+    -fx-text-fill: white;
+    -fx-pref-height: 100vh;
+    -fx-pref-width: 250px;
+    -fx-position: fixed;
+    -fx-padding: 20px;
+    -fx-display: flex;
+    -fx-flex-direction: column;
+}
+
+.sidebar img {
+    -fx-background-radius: 50%;
+    -fx-pref-width: 50px;
+    -fx-pref-height: 50px;
+    -fx-margin-bottom: 20px;
+}
+
+.sidebar .username {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-margin-bottom: 20px;
+}
+
+.sidebar ul {
+    -fx-list-style-type: none;
+    -fx-padding: 0;
+}
+
+.sidebar ul li {
+    -fx-padding: 15px 0;
+    -fx-cursor: hand;
+    -fx-font-size: 18px;
+}
+
+.sidebar ul li:hover {
+    -fx-background-color: #34495E;
+}
+
+.sidebar .logout {
+    -fx-position: absolute;
+    -fx-bottom: 20px;
+    -fx-left: 20px;
+}
+
+/* Main Content */
+.main-content {
+    -fx-margin-left: 250px;
+    -fx-padding: 20px;
+    -fx-pref-width: 100%;
+}
+
+/* Footer */
+/*.footer {
+    -fx-margin-top: 30px;
+    -fx-text-align: center;
+    -fx-font-size: 14px;
+    -fx-text-fill: #BDC3C7;
+}*/

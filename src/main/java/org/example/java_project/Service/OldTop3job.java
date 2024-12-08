@@ -29,6 +29,7 @@ public class OldTop3job extends Task<XYChart.Series<String, Number>> {
 
     @Override
     public XYChart.Series<String, Number> call() throws IOException {
+
         fs = hadoopConf.getFileSystem();
         boolean outputExist = fs.exists(new Path(output));
 

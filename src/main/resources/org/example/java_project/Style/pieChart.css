@@ -1,33 +1,43 @@
-.chart-title {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #333333;
-}
-
-.chart-legend {
-    -fx-background-color: #f9f9f9;
-    -fx-border-color: #d9d9d9;
-}
-
-.default-color0.chart-pie {
-    -fx-pie-color: #47f0ff; /* Light Blue for Pending */
-}
-
-.default-color1.chart-pie {
-    -fx-pie-color: #0077ff; /* Blue for In Progress Critique */
-}
-
-.default-color2.chart-pie {
-    -fx-pie-color: #32CD32; /* Green for Completed */
-}
-
-.chart-pie-label {
-    -fx-font-size: 14px;
+/* pieChart.css */
+.button-primary {
+    -fx-background-color: rgb(42, 113, 157); /* Blue with full opacity */
     -fx-text-fill: white;
-    -fx-background-color: rgba(0, 0, 0, 0.5);
-    -fx-padding: 2px;
-    -fx-background-radius: 3px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 5 20 5 20;
 }
-.label{
-    -fx-text-fill: #e7e5e5;
+
+.button-primary:hover {
+    -fx-background-color: rgb(33, 50, 134); /* Darker blue */
+}
+
+.date-picker {
+    -fx-background-color: rgb(48, 141, 198); /* Another shade of blue */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 5;
+    -fx-background-radius: 5;
+}
+
+.date-picker .arrow {
+    -fx-background-color: rgb(0, 119, 255); /* Same blue as button */
+}
+
+.combo-box {
+    -fx-background-color: rgb(42, 113, 157); /* Same as DatePicker */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+}
+
+.combo-box .arrow {
+    -fx-background-color: rgb(71, 255, 206); /* Same blue as button */
+}
+
+.chart-title {
+    -fx-text-fill: #fdfcfc;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
 }
