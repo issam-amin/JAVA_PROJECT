@@ -1,6 +1,6 @@
 /* Styling for better chart view */
 .chart-plot-background {
-    -fx-background-color: #f9f9f9;
+    -fx-background-color: transparent;
 }
 
 .chart-series-line {

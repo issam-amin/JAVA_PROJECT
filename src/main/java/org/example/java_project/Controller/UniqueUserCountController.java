@@ -2,15 +2,18 @@ package org.example.java_project.Controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.example.java_project.Service.JobType;
 import org.example.java_project.Service.UniqueUserCount;
 
@@ -21,9 +24,6 @@ import static org.example.java_project.Service.DbConnection.getType;
 public class UniqueUserCountController {
 
     @FXML
-    private LineChart<String, Number> lineChart;
-
-    @FXML
     private TableView<Result> tableView;
 
     @FXML
@@ -31,6 +31,12 @@ public class UniqueUserCountController {
 
     @FXML
     private TableColumn<Result, Integer> countColumn;
+
+    @FXML
+    private Button loadButton;
+
+    @FXML
+    private Button chartButton;
 
     public static class Result {
         private final String type;
@@ -50,70 +56,42 @@ public class UniqueUserCountController {
         }
     }
 
-   /* @FXML
-    private void initialize(ActionEvent actionEvent) {
-        try {
-            UniqueUserCount uniqueUserCount = new UniqueUserCount("UniqueUserCount", JobType.NORMAL);
-            HashMap<String, Integer> result = uniqueUserCount.call();
-
-
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            result.forEach((type, count) -> series.getData().add(new XYChart.Data<>(type, count)));
-            lineChart.getData().add(series);
-
-            // Populate TableView
-            ObservableList<Result> data = FXCollections.observableArrayList();
-            result.forEach((type, count) -> data.add(new Result(type, count)));
-
-            typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-            countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
-            tableView.setItems(data);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
     @FXML
     private void initialize() {
         // Initialize table columns
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
 
+        // Set button actions
+        loadButton.setOnAction(event -> loadData());
+        chartButton.setOnAction(event -> showChart());
+
         // Load initial data
         loadData();
     }
+
     @FXML
     private void loadData() {
         try {
             // Clear previous data
-            lineChart.getData().clear();
             tableView.getItems().clear();
 
             // Fetch new data
             UniqueUserCount uniqueUserCount = new UniqueUserCount("UniqueUserCount", JobType.NORMAL);
-            HashMap<String, Integer> result = uniqueUserCount.call(); // This gets the raw data with id and count
+            HashMap<String, Integer> result = uniqueUserCount.call();
 
-            // Populate LineChart and TableView with type fetched from the database
+            // Populate TableView
             ObservableList<Result> data = FXCollections.observableArrayList();
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
 
             for (String id : result.keySet()) {
-                String type = getType(id);  // Fetch type from the database based on the id
+                String type = getType(id); // Fetch type from the database
                 Integer count = result.get(id);
 
-                if (type != null) {  // If type is found, add it to the chart and table
-                    // Add to the chart
-                    series.getData().add(new XYChart.Data<>(type, count));
-
-                    // Add to the table
+                if (type != null) {
                     data.add(new Result(type, count));
                 }
             }
 
-            // Set chart data
-            lineChart.getData().add(series);
-
-            // Set table data
             tableView.setItems(data);
 
         } catch (Exception e) {
@@ -122,33 +100,35 @@ public class UniqueUserCountController {
     }
 
     @FXML
-/*
-    private void handleShowResults(ActionEvent actionEvent) {
+    private void showChart() {
         try {
             UniqueUserCount uniqueUserCount = new UniqueUserCount("UniqueUserCount", JobType.NORMAL);
             HashMap<String, Integer> result = uniqueUserCount.call();
 
-            // Populate LineChart
+            LineChart<String, Number> lineChart = new LineChart<>(new CategoryAxis(), new NumberAxis());
+            lineChart.setTitle("Unique User Count");
+
             XYChart.Series<String, Number> series = new XYChart.Series<>();
-            result.forEach((type, count) -> series.getData().add(new XYChart.Data<>(type, count)));
+            for (String id : result.keySet()) {
+                String type = getType(id); // Fetch type from the database
+                Integer count = result.get(id);
+                if (type != null) {
+                    series.getData().add(new XYChart.Data<>(type, count));
+                }
+            }
             lineChart.getData().add(series);
 
-            // Populate TableView
-            ObservableList<Result> data = FXCollections.observableArrayList();
-            result.forEach((type, count) -> data.add(new Result(type, count)));
+            Stage chartStage = new Stage();
+            VBox chartLayout = new VBox(lineChart);
+            chartLayout.setPadding(new javafx.geometry.Insets(10));
 
-            typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-            countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
-            tableView.setItems(data);
-
+            Scene scene = new Scene(chartLayout, 800, 600);
+            chartStage.setTitle("Line Chart");
+            chartStage.setScene(scene);
+            chartStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-*/
 
-    private void handleShowResults(ActionEvent actionEvent) {
-        // Reload data on button click
-        loadData();
-    }
 }

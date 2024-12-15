@@ -4,9 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -20,6 +18,10 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,13 +40,99 @@ public class ClientChurnController {
     @FXML
     private TableColumn<Map<String, String>, String> predictionColumn;
 
+
+
     @FXML
     public void initialize() {
         customerIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get("customerId")));
         fullNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get("fullName")));
         predictionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get("prediction")));
+
+        // Add click event to the 'fullNameColumn'
+        fullNameColumn.setCellFactory(tc -> {
+            TableCell<Map<String, String>, String> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setOnMouseClicked(null);
+                    } else {
+                        setText(item);
+                        setOnMouseClicked(event -> {
+                            Map<String, String> selectedRow = getTableRow().getItem();
+                            if (selectedRow != null) {
+                                String customerId = selectedRow.get("customerId");
+                                String fullName = selectedRow.get("fullName");
+                                handleClientClick(customerId, fullName);
+                            }
+                        });
+                    }
+                }
+            };
+            return cell;
+        });
+
         new Thread(this::runPredictionAndDisplay).start();
     }
+
+    /**
+     * Handles the click event for a client name.
+     */
+    private void handleClientClick(String customerId, String fullName) {
+        try {
+            boolean exportSuccess = DbConnection.export2("customer", "client_" + customerId + ".csv");
+            if (exportSuccess) {
+                System.out.println("Client data exported successfully for: " + fullName);
+            } else {
+                System.err.println("Failed to export client data for: " + fullName);
+            }
+
+            Map<String, String> clientDetails = getClientDetails(customerId);
+
+            showClientPopup(fullName, clientDetails);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Fetches the client's details from the database.
+     */
+    private Map<String, String> getClientDetails(String customerId) throws SQLException, SQLException {
+        Connection connection = DbConnection.getConnection();
+        String sql = "SELECT * FROM customer WHERE id = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, customerId);
+        ResultSet resultSet = statement.executeQuery();
+
+        Map<String, String> clientDetails = new HashMap<>();
+        if (resultSet.next()) {
+            int columnCount = resultSet.getMetaData().getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = resultSet.getMetaData().getColumnName(i);
+                String value = resultSet.getString(i);
+                clientDetails.put(columnName, value);
+            }
+        }
+        return clientDetails;
+    }
+
+    /**
+     * Displays the client's details in a popup.
+     */
+    private void showClientPopup(String fullName, Map<String, String> clientDetails) {
+        StringBuilder detailsBuilder = new StringBuilder();
+        clientDetails.forEach((key, value) -> detailsBuilder.append(key).append(": ").append(value).append("\n"));
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Client Details");
+        alert.setHeaderText("Details for: " + fullName);
+        alert.setContentText(detailsBuilder.toString());
+        alert.showAndWait();
+    }
+
 
     public void runPredictionAndDisplay() {
         try {
@@ -52,26 +140,46 @@ public class ClientChurnController {
 
             ObservableList<Map<String, String>> predictionItems = FXCollections.observableArrayList();
 
-            // Fetch client names from the database
             Map<String, String> clientNames = getAllClientNames();
 
-            // Process the predictions and format them for the TableView
             predictions.collectAsList().forEach(row -> {
                 String customerId = row.getAs("customerID");
                 String name = clientNames.getOrDefault(customerId, "Unknown");
                 Double predictionValue = row.getAs("prediction");
 
-                // Prepare the row for display
-                Map<String, String> rowMap = new HashMap<>();
-                rowMap.put("customerId", customerId);
-                rowMap.put("fullName", name);
-                rowMap.put("prediction", (predictionValue == 1.0) ? "Leave" : "Stay");
+                if (predictionValue == 1.0) {
+                    Map<String, String> rowMap = new HashMap<>();
+                    rowMap.put("customerId", customerId);
+                    rowMap.put("fullName", name);
+                    rowMap.put("prediction", "Leave");
 
-                // Add the row map to the list
-                predictionItems.add(rowMap);
+                    predictionItems.add(rowMap);
+                }
             });
 
-            // Set the TableView items
+            javafx.application.Platform.runLater(() -> {
+                customerPredictionTableView.setItems(predictionItems);
+
+                // Style the "prediction" column
+                predictionColumn.setCellFactory(column -> new TableCell<>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                            setStyle("");
+                        } else {
+                            setText(item);
+                            if ("Leave".equals(item)) {
+                                setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                            } else {
+                                setStyle(""); // Reset style for other cases
+                            }
+                        }
+                    }
+                });
+            });
+
             javafx.application.Platform.runLater(() -> customerPredictionTableView.setItems(predictionItems));
 
         } catch (Exception e) {
