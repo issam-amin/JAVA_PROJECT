@@ -137,6 +137,13 @@ public class Top3jobController implements Initializable {
                 System.out.println("dds");
             });
         });
+        job.setOnFailed(event->{
+            Platform.runLater(() -> {
+                state.setText("");
+
+            });
+
+        });
 
 
 

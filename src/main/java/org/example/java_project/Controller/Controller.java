@@ -109,7 +109,7 @@ public class Controller {
                     } else {
                         System.out.println("Output file for the current day does not exist.");
                     }
-                    fs.close();
+                  /*  fs.close();*/
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -175,7 +175,7 @@ public class Controller {
                     } else {
                         System.out.println("Output file for the current day does not exist.");
                     }
-                    fs.close();
+                   /* fs.close();*/
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

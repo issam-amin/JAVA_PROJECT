@@ -65,7 +65,10 @@ public class Top3Job extends Task<XYChart.Series<String, Number>>  {
             }
             case REFRESH: {
                 try {
+                    System.out.println("eeeee");
+/*
                     DbConnection.export("rec");
+*/
                     return RunJob("src/main/resources/data.csv");
                 } catch (Exception e) {
                     throw new IOException("error while refreshing");
