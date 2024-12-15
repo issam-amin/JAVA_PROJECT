@@ -16,6 +16,7 @@ import org.example.java_project.Service.AllJobs;
 import org.example.java_project.Service.JobType;
 import org.example.java_project.Service.RectypeJob;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class RectypeController implements Initializable {
     @FXML
@@ -47,17 +49,28 @@ public class RectypeController implements Initializable {
     private void loadArchives() {
         try {
             List<String> archives = RectypeJob.getArchivesFromHDFS();
+            List<String> filteredArchives = archives.stream()
+                    .filter(archive -> archive.contains("chart2"))  // Filter for "chart2" only
+                    .map(this::extractFormattedDate)  // Map each archive to the formatted date
+                    .collect(Collectors.toList());
 
-            if (archives.isEmpty()) {
-                updateState("No archives found in HDFS.", "red");
+            if (filteredArchives.isEmpty()) {
+                updateState("No archives found for chart2 in HDFS.", "red");
             } else {
-                Platform.runLater(() -> Archives.getItems().addAll(archives));
+                Platform.runLater(() -> Archives.getItems().addAll(filteredArchives));  // Use filteredArchives
                 Archives.setOnAction(this::handleArchiveSelection);
             }
         } catch (IOException e) {
             updateState("Failed to load archives from HDFS.", "#ffffff");
         }
     }
+
+    private String extractFormattedDate(String archiveName) {
+        String datePart = archiveName.split("_")[1];
+
+        return datePart;
+    }
+
 
     // Action when refreshing the pie chart
     @FXML
@@ -85,7 +98,6 @@ public class RectypeController implements Initializable {
         jobThread.setDaemon(true);
         jobThread.start();
     }
-
     private void showLoadingPieChart() {
         ObservableList<PieChart.Data> randomData = FXCollections.observableArrayList(
                 new PieChart.Data("Pending", random.nextInt(4000) + 1000),
@@ -102,11 +114,19 @@ public class RectypeController implements Initializable {
 
         Scene scene = panepie.getScene();
         if (scene != null) {
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("../Style/pieChart.css")).toExternalForm());
+            URL cssResource = getClass().getResource("../Style/pieChart.css");
+            if (cssResource != null) {
+                scene.getStylesheets().add(cssResource.toExternalForm());
+            } else {
+                System.err.println("Error: CSS resource not found.");
+            }
+        } else {
+            System.err.println("Error: Scene is null.");
         }
         panepie.getChildren().clear();
         panepie.getChildren().add(loadingPieChart);
     }
+
 
     private void updatePieChartData(HashMap<String, Integer> jobResults) {
         int total = jobResults.values().stream().mapToInt(Integer::intValue).sum();
@@ -137,7 +157,7 @@ public class RectypeController implements Initializable {
             tooltip.setShowDelay(Duration.seconds(0.2));
             Tooltip.install(node, tooltip);
 
-            node.setOnMouseEntered(event -> node.setStyle("-fx-effect: dropshadow(gaussian, lightgray, 10, 0.5, 0, 0);"));
+            node.setOnMouseEntered(event -> node.setStyle("-fx-effect: dropshadow(gaussian, #080808, 10, 0.5, 0, 0);"));
             node.setOnMouseExited(event -> node.setStyle(""));
 
             node.setOnMouseClicked(event -> {
@@ -156,11 +176,11 @@ public class RectypeController implements Initializable {
         return String.format("%.1f%%", percentage);
     }
 
-    @FXML
+
     public void getOutputForDate(ActionEvent actionEvent) {
         LocalDate selectedDate = datePicker.getValue();
         if (selectedDate == null) {
-            System.out.println("No date selected!");
+            showAlert("Error", "No date selected!", Alert.AlertType.ERROR);
             return;
         }
 
@@ -187,11 +207,24 @@ public class RectypeController implements Initializable {
                 updateState("Data loaded successfully!", "green");
             });
 
+        } catch (FileNotFoundException e) {
+            showAlert("Error", "File not found: " + e.getMessage() + "\nCheck if the file exists in the archive.", Alert.AlertType.ERROR);
         } catch (IOException e) {
             updateState("An error occurred while fetching data.", "red");
             e.printStackTrace();
         }
     }
+
+    // Method to show an alert
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
 
     private void handleArchiveSelection(ActionEvent event) {
         String selectedArchive = Archives.getValue();
@@ -220,10 +253,14 @@ public class RectypeController implements Initializable {
 
     private void updateState(String message, String color) {
         Platform.runLater(() -> {
+            if (state == null) {
+                System.out.println("state is null");
+            }
             state.setText(message);
             state.setStyle("-fx-text-fill: " + color + ";");
         });
     }
+
 
 
 }

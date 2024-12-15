@@ -22,9 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.example.java_project.Service.DbConnection.getClient;
-import static org.example.java_project.Service.DbConnection.getType;
-
 public class clientTypeJob extends Task<Map<String, Integer>> {
     private final String input;
     private final String output;
@@ -33,7 +30,6 @@ public class clientTypeJob extends Task<Map<String, Integer>> {
     private final String currentDate;
     private LocalTime jobTime;
     private static JobType jobType;
-    private static Configuration hadoopConf;
 
     public clientTypeJob(String jobName, JobType jobType) {
         this.jobType = jobType;
@@ -47,8 +43,8 @@ public class clientTypeJob extends Task<Map<String, Integer>> {
 
     @Override
     protected Map<String, Integer> call() throws Exception {
-        hadoopConf = new Configuration();
-        fs = FileSystem.get(hadoopConf);
+        // Use the singleton FileSystem instance from hadoopConf
+        fs = hadoopConf.getFileSystem();
         boolean outputExists = fs.exists(new Path(output));
 
         if (outputExists && jobType == JobType.NORMAL) {
@@ -71,10 +67,7 @@ public class clientTypeJob extends Task<Map<String, Integer>> {
             String[] tokens = value.toString().split(",");
             if (tokens.length > 1) {
                 String clientId = tokens[1].trim();
-                // String client = getClient(clientId);
                 String reclamationId = tokens[2].trim();
-                //String reclamationType = getType(reclamationId);
-                //String pair = client + "_" + reclamationType;
                 String pair2 = clientId + "_" + reclamationId;
                 word.set(pair2);
                 context.write(word, one);
@@ -100,8 +93,8 @@ public class clientTypeJob extends Task<Map<String, Integer>> {
         Path hdfsFilePath = new Path(hdfsFilePathStr);
         Path localPath = new Path(localFilePath);
 
-        Job job = Job.getInstance(hadoopConf, jobName);
-        fs = FileSystem.get(hadoopConf);
+        // Use the singleton Job from hadoopConf
+        Job job = hadoopConf.getJob(jobName);
 
         job.setJarByClass(clientTypeJob.class);
         job.setMapperClass(TokenizerMapper.class);

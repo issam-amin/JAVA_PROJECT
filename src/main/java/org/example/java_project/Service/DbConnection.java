@@ -1,9 +1,11 @@
 package org.example.java_project.Service;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.HashMap;
+import java.util.Map;
 
 public class DbConnection {
     static final Connection connection;
@@ -14,12 +16,29 @@ public class DbConnection {
             throw new RuntimeException(e);
         }
     }
-    public static Connection getConnection() {
+/*    public static Connection getConnection() {
         return connection;
+    }*/
+public static Connection getConnection() {
+    Connection conn = null;
+    try {
+        if (conn == null || conn.isClosed()) {
+            // Establish a new connection if the old one is closed
+           conn =DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return conn;
+}
+
+
 
     public static boolean export(String table){
         String csvFilePath = "src/main/resources/data.csv";
+        System.out.println("CSV file path: " + new File(csvFilePath).getAbsolutePath());
+
+        // System.out.println(csvFilePath);
         try {
             Connection connection = getConnection();
             String sql = "SELECT * FROM "+ table; // Query to extract table data
@@ -50,7 +69,48 @@ public class DbConnection {
             return false;
         }
     }
+    public static boolean export2(String table,String csvname){
+        String csvFilePath = "src/main/resources/"+csvname;
+        System.out.println("CSV file path: " + new File(csvFilePath).getAbsolutePath());
 
+        // System.out.println(csvFilePath);
+        try {
+            Connection connection = getConnection();
+            String sql = "SELECT id ,Gender, SeniorCitizen, Partner, Dependents,tenure, " +
+                    "PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, " +
+                    "TechSupport, StreamingTV, StreamingMovies, Contract, PaperlessBilling, PaymentMethod, " +
+                    "MonthlyCharges, TotalCharges " +
+                    "FROM " + table + ";";
+
+
+            // Query to extract table data
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            // Write CSV file
+            FileWriter csvWriter = new FileWriter(csvFilePath);
+            // Get column names and write as header row in CSV
+            int columnCount = resultSet.getMetaData().getColumnCount();
+            // Write data rows
+            while (resultSet.next()) {
+                for (int i = 1; i <= columnCount; i++) {
+                    csvWriter.append(resultSet.getString(i));
+                    if (i < columnCount) csvWriter.append(","); // Add comma if not the last column
+                }
+                csvWriter.append("\n"); // New line after each row
+            }
+            csvWriter.flush();
+            csvWriter.close();
+            System.out.println("CSV file created successfully: " + csvFilePath);
+            return  true;
+
+        } catch (IOException e) {
+            System.err.println("Error writing to CSV file: " + e.getMessage());
+            return false;
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
     public  static String getType(String id ){
 
         Connection connection = getConnection();
@@ -92,7 +152,23 @@ public class DbConnection {
 
         return null;
     }
+    public static Map<String, String> getAllClientNames() {
+        Map<String, String> clientNames = new HashMap<>();
+        String sql = "SELECT id, CONCAT(firstName, ' ', lastName) AS name FROM customer";
 
+        try (var connection = DbConnection.getConnection();
+             var statement = connection.createStatement();
+             var resultSet = statement.executeQuery(sql)) {
+
+            while (resultSet.next()) {
+                clientNames.put(resultSet.getString("id"), resultSet.getString("name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return clientNames;
+    }
     public static boolean validateLogin(String username, String password) {
         Connection connection = getConnection();
         String query = "SELECT * FROM admin_user WHERE username = ? AND password = ?";

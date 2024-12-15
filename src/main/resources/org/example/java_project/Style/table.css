@@ -1,140 +1,83 @@
-/* General Layout */
-* {
-    -fx-padding: 0;
-    -fx-border-insets: 0;
-    -fx-background-insets: 0;
+/* Apply a light background color to the whole application */
+.root {
+    -fx-background-color: #f4f4f9;
+    -fx-padding: 20;
 }
 
-/* Header */
+/* Style for the header label */
 .header {
-    -fx-font-size: 34px;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-margin-bottom: 20px;
-    -fx-text-fill: #2C3E50;
+    -fx-text-fill: #333333;
+    -fx-padding: 10 0 20 0;
 }
 
-/* Search and Table Section */
+/* Style for the search bar */
 .search-bar {
-    -fx-margin-bottom: 20px;
-    -fx-pref-width: 300px;
-    -fx-padding: 10px;
-    -fx-border-color: #051f1c;
-    -fx-border-width: 1px;
-    -fx-border-radius: 20px;
-    -fx-font-size: 16px;
-}
-
-.table-container {
-    -fx-pref-width: 100%;
-    -fx-overflow-x: auto;
-}
-
-.table-container .table-view {
-    -fx-pref-width: 100%;
-    -fx-border-collapse: collapse;
-    -fx-margin-top: 20px;
-}
-
-.table-container .table-view .column-header-background {
-    -fx-background-color: #ECF0F1;
-}
-
-.table-container .table-view .column-header,
-.table-container .table-view .cell {
-    -fx-padding: 15px;
-    -fx-alignment: CENTER_LEFT;
-    -fx-border-color: #BDC3C7;
-    -fx-border-width: 1px;
-}
-
-.table-container .table-view .cell {
+    -fx-background-radius: 25;
     -fx-background-color: #ffffff;
+    -fx-padding: 10;
+    -fx-border-color: #d1d1d1;
+    -fx-border-radius: 25;
+    -fx-border-width: 1;
+    -fx-font-size: 14px;
 }
 
-/* Un-comment the following if you want alternate row colors */
-/*
-.table-container .table-view .cell:odd {
-    -fx-background-color: #F9F9F9;
-}
-*/
-
-.table-container .table-view .cell:hover {
-    -fx-background-color: #BDC3C7;
+/* Style for the table container */
+.table-container {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d1d1d1;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
 }
 
-/* Button Styles */
-.button {
-    -fx-background-color: #045bb3;
-    -fx-text-fill: white;
-    -fx-border-width: 0;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 10px;
+/* Style for table headers */
+.table-view .column-header-background {
+    -fx-background-color: #f4f4f9;
+}
+
+.table-view .column-header, .table-view .column-header-background {
+    -fx-border-color: #d1d1d1;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* New styles for table headers */
+.table-view .column-header .label {
+    -fx-background-color: #e9ecef;
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
     -fx-font-size: 16px;
+    -fx-padding: 10 0;
+    -fx-alignment: center;
+}
+
+/* Style for table rows */
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #f4f4f9;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #fafafa;
+}
+
+/* Style for the refresh button */
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 25;
     -fx-cursor: hand;
-    -fx-transition: background-color 0.3s ease;
 }
 
 .button:hover {
-    -fx-background-color: #34495E;
+    -fx-background-color: #45a049;
 }
 
-/* Sidebar */
-.sidebar {
-    -fx-background-color: #2C3E50;
-    -fx-text-fill: white;
-    -fx-pref-height: 100vh;
-    -fx-pref-width: 250px;
-    -fx-position: fixed;
-    -fx-padding: 20px;
-    -fx-display: flex;
-    -fx-flex-direction: column;
+/* Apply padding and alignment to the VBox container */
+.vbox {
+    -fx-alignment: top_center;
+    -fx-spacing: 10;
 }
-
-.sidebar img {
-    -fx-background-radius: 50%;
-    -fx-pref-width: 50px;
-    -fx-pref-height: 50px;
-    -fx-margin-bottom: 20px;
-}
-
-.sidebar .username {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-margin-bottom: 20px;
-}
-
-.sidebar ul {
-    -fx-list-style-type: none;
-    -fx-padding: 0;
-}
-
-.sidebar ul li {
-    -fx-padding: 15px 0;
-    -fx-cursor: hand;
-    -fx-font-size: 18px;
-}
-
-.sidebar ul li:hover {
-    -fx-background-color: #34495E;
-}
-
-.sidebar .logout {
-    -fx-position: absolute;
-    -fx-bottom: 20px;
-    -fx-left: 20px;
-}
-
-/* Main Content */
-.main-content {
-    -fx-margin-left: 250px;
-    -fx-padding: 20px;
-    -fx-pref-width: 100%;
-}
-
-/* Footer */
-/*.footer {
-    -fx-margin-top: 30px;
-    -fx-text-align: center;
-    -fx-font-size: 14px;
-    -fx-text-fill: #BDC3C7;
-}*/

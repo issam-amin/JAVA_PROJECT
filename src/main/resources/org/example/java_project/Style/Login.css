@@ -9,7 +9,7 @@
 
 .login_image_container{
     -fx-alignment: center-right;
-    -fx-background-color: #0e154a;
+    -fx-background-color: #0048ff;
     /*
     -fx-background-color: #2262C6;
     */
@@ -47,14 +47,14 @@
 .login_form_button{
     -fx-pref-width: 90;
     -fx-pref-height: 37;
-    -fx-background-color: #72C63A;
+    -fx-background-color: #0077ff;
     -fx-font-weight: bold;
     -fx-font-size: 18;
     -fx-font-family: Calibri;
     -fx-text-fill: #ffff;
     -fx-cursor: hand;
     -fx-background-radius: 5px;
-    -fx-border-color: #467C40;
+    -fx-border-color: #0e154a;
     -fx-border-width: 1;
     -fx-border-radius: 5;
 }
@@ -62,12 +62,12 @@
 
 .login_form_button:hover{
     -fx-background-color: transparent;
-    -fx-text-fill: #2262C6;
+    -fx-text-fill: #213286;
 }
 
 .login_form_label{
 
-    -fx-fill: #72C63A;
+    -fx-fill: #0077ff;
     -fx-font-size: 40;
     -fx-font-weight: bold;
 

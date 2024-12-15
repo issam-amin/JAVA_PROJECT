@@ -38,7 +38,7 @@ public class UniqueUserCount {
     }
 
     public HashMap<String, Integer> call() throws IOException {
-        fs = FileSystem.get(new Configuration());
+        fs = hadoopConf.getFileSystem();
         boolean outputExists = fs.exists(new Path(output));
 
         switch (jobType) {
@@ -100,9 +100,9 @@ public class UniqueUserCount {
         Path hdfsFilePath = new Path(hdfsFilePathStr);
         Path localPath = new Path(localFilePath);
 
-        Configuration conf = new Configuration();
-        Job job = Job.getInstance(conf, jobName);
-        fs = FileSystem.get(conf);
+
+        Job job = hadoopConf.getJob(jobName);
+        fs = hadoopConf.getFileSystem();
 
         job.setJarByClass(UniqueUserCount.class);
         job.setMapperClass(TokenizerMapper.class);

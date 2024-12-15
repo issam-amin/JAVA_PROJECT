@@ -23,8 +23,8 @@
         </VBox>
         <VBox layoutX="388.0" layoutY="141.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="306.0" prefWidth="425.0" styleClass="login_form_container" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="71.0" AnchorPane.topAnchor="141.0">
             <children>
-                <TextField fx:id="usernameField" promptText="User Name" snapToPixel="false" styleClass="login_form_input_fields" text="UserName" />
-                <PasswordField fx:id="passwordField" promptText="Password" styleClass="login_form_input_fields" text="password" />
+                <TextField fx:id="usernameField" promptText="User Name" snapToPixel="false" styleClass="login_form_input_fields" />
+                <PasswordField fx:id="passwordField" promptText="Password" styleClass="login_form_input_fields" />
                 <HBox alignment="CENTER" prefHeight="40.0" prefWidth="371.0">
                     <children>
                         <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" styleClass="login_form_button" text="Log in">

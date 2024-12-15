@@ -1,0 +1,73 @@
+/* Apply a light background color to the whole application */
+.root {
+    -fx-background-color: #f4f4f9;
+    -fx-padding: 20;
+}
+
+/* Style for the header label */
+.header {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 10 0 20 0;
+}
+
+/* Style for the search bar */
+.search-bar {
+    -fx-background-radius: 25;
+    -fx-background-color: #ffffff;
+    -fx-padding: 10;
+    -fx-border-color: #d1d1d1;
+    -fx-border-radius: 25;
+    -fx-border-width: 1;
+    -fx-font-size: 14px;
+}
+
+/* Style for the table container */
+.table-container {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d1d1d1;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}
+
+/* Style for table headers */
+.table-view .column-header-background {
+    -fx-background-color: #f4f4f9;
+}
+
+.table-view .column-header, .table-view .column-header-background {
+    -fx-border-color: #d1d1d1;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Style for table rows */
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #f4f4f9;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #fafafa;
+}
+
+/* Style for the refresh button */
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Apply padding and alignment to the VBox container */
+.vbox {
+    -fx-alignment: top_center;
+    -fx-spacing: 10;
+}

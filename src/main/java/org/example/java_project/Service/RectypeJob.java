@@ -216,10 +216,10 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
 
         FileStatus[] fileStatuses = fs.listStatus(archivesPath);
 
-        // Define the regex pattern for matching directories (e.g., "output_2024-12-01_chart2")
-        Pattern pattern = Pattern.compile("^output_\\d{4}-\\d{2}-\\d{2}_chart\\d+$");
+     Pattern pattern = Pattern.compile("^output_\\d{4}-\\d{2}-\\d{2}_chart\\d+$");
 
-        // Check if the directory is empty
+      //  Pattern pattern = Pattern.compile("^output_\\d{4}-\\d{2}-\\d{2}_" + jobName + "\\d+$");
+
         if (fileStatuses == null || fileStatuses.length == 0) {
             System.out.println("No archives found in the specified directory.");
         } else {
@@ -240,6 +240,9 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         fs.close();
         return archiveNames;
     }
+
+
+
 
 
 

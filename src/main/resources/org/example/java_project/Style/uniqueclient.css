@@ -1,0 +1,47 @@
+/* Styling for better chart view */
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-series-line {
+    -fx-stroke-width: 2;
+    -fx-stroke: #4CAF50; /* Green color */
+}
+
+.chart-data-symbol {
+    -fx-background-color: #FF5722; /* Orange color for markers */
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-padding: 5px;
+}
+
+/* Table styling */
+.table-view {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #DDDDDD;
+    -fx-border-width: 1;
+}
+
+.table-view .table-header-background {
+    -fx-background-color: #4CAF50; /* Green header */
+}
+
+.table-view .column-header {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+.table-view .table-cell {
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER;
+    -fx-padding: 10px;
+}
+
+/* Button hover effect */
+.button:hover {
+    -fx-background-color: #45a049; /* Darker green */
+}
+
+.button:pressed {
+    -fx-background-color: #388E3C; /* Even darker green */
+}
