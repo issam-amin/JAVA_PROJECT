@@ -1,0 +1,71 @@
+/* style.css */
+
+/* TextField Styles */
+.text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: #B7C3D7;
+    -fx-border-radius: 2em;
+}
+
+/* Button Styles */
+.button {
+    -fx-background-color: #2A73FF;
+    -fx-text-fill: white;
+}
+
+/* Transparent Button Styles */
+.button.transparent {
+    -fx-border-color: #2A73FF;
+    -fx-border-radius: 0;
+    -fx-background-color: transparent;
+}
+
+/* Transparent Button with Border Radius */
+.button.border-radius {
+    -fx-border-color: #2A73FF;
+    -fx-border-radius: 20;
+    -fx-background-color: transparent;
+}
+
+/* Label Styles */
+.label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #b7c3d7;
+}
+
+/* VBox Background Color */
+.vbox {
+    -fx-background-color: #fdfcfc;
+}
+
+/* HBox Background Color */
+.hbox {
+    -fx-background-color: #e5e6ec;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
+}
+
+/* VBox for pnItems Background Color */
+.vbox.pnItems {
+    -fx-background-color: #02030A;
+}
+
+/* HBox for itemC Background Color */
+.hbox.itemC {
+    -fx-background-color: #02030A;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
+}
+
+/* ScrollPane Styles */
+.scroll-pane {
+    -fx-background-color: #02030A;
+}
+
+.scroll-pane.vbarPolicy {
+    -fx-vbar-policy: never;
+}
+
+.scroll-pane.hbarPolicy {
+    -fx-hbar-policy: never;
+}

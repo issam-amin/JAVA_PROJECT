@@ -12,12 +12,11 @@ public class MainD extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-         // Parent root = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
+         //Parent root = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
              Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
         primaryStage.setScene(new Scene(root));
 
         // Set stage borderless
-        /*primaryStage.initStyle(StageStyle.UNDECORATED);*/
 
         // Add dragging functionality
         root.setOnMousePressed(event -> {

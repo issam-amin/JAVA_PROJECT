@@ -1,0 +1,258 @@
+package org.example.java_project.Controller;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.spark.ml.PipelineModel;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.functions;
+import org.apache.spark.sql.types.*;
+import org.example.java_project.ClientPrediction;
+import org.example.java_project.Service.DbConnection;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.example.java_project.Service.hadoopConf;
+
+import java.io.File;
+import java.io.IOException;
+
+import static org.example.java_project.Service.DbConnection.getClientTest;
+
+
+public class ClientChurnController {
+    static FileSystem fs ;
+  /*  @FXML
+    private TableView<ClientPrediction> clientsTable;
+
+    @FXML
+    private TableColumn<ClientPrediction, String> clientIDColumn;
+
+    @FXML
+    private TableColumn<ClientPrediction, String> churnPredictionColumn;
+    @FXML*/
+    private ListView<String> predictionsListView;
+    @FXML
+    public void initialize() {
+        //setupTableColumns();
+        displayPredictions();
+        new Thread(this::runPredictionAndLoadData).start();
+    }
+
+   /* private void setupTableColumns() {
+        clientIDColumn.setCellValueFactory(new PropertyValueFactory<>("client"));
+        churnPredictionColumn.setCellValueFactory(new PropertyValueFactory<>("prediction"));
+    }*/
+
+
+    public void displayPredictions() {
+        // Read predictions from HDFS
+        Dataset<Row> predictions = fetchPredictionsFromHdfs();
+
+        // Create ObservableList to store formatted predictions
+        ObservableList<String> predictionItems = FXCollections.observableArrayList();
+
+        // Map customerID to names and format the predictions
+        predictions.collectAsList().forEach(row -> {
+            String customerId = row.getAs("customerID");
+            String name = getClientTest(customerId); // Use the getClientTest function
+            String prediction = row.getAs("prediction").toString();
+
+            // Format each item (e.g., "Name: John Doe, Prediction: 0.0")
+            String formattedPrediction = String.format("Name: %s, Prediction: %s", name, prediction);
+            predictionItems.add(formattedPrediction);
+        });
+
+        // Set the items in the ListView
+        predictionsListView.setItems(predictionItems);
+    }
+
+    // Fetch predictions from HDFS
+    private Dataset<Row> fetchPredictionsFromHdfs() {
+        SparkSession spark = SparkSession.builder()
+                .appName("Read Predictions")
+                .master("local[*]")
+                .getOrCreate();
+
+        return spark.read()
+                .option("header", "true")
+                .csv("hdfs://localhost:9000/amine/churn_prediction");
+    }
+
+
+
+    public void runPredictionAndLoadData() {
+
+        fetchDataFromDatabase();
+        SparkSession spark = SparkSession.builder()
+                .appName("Client Churn Prediction")
+                .master("local[*]")
+                .config("spark.hadoop.fs.defaultFS", "hdfs://localhost:9000")
+                .getOrCreate();
+
+        StructType schema = new StructType(new StructField[] {
+                new StructField("customerID", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("Gender", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("SeniorCitizen", DataTypes.IntegerType, true, Metadata.empty()),
+                new StructField("Partner", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("Dependents", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("Tenure", DataTypes.IntegerType, true, Metadata.empty()),
+                new StructField("PhoneService", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("MultipleLines", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("InternetService", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("OnlineSecurity", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("OnlineBackup", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("DeviceProtection", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("TechSupport", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("StreamingTV", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("StreamingMovies", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("Contract", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("PaperlessBilling", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("PaymentMethod", DataTypes.StringType, true, Metadata.empty()),
+                new StructField("MonthlyCharges", DataTypes.DoubleType, true, Metadata.empty()),
+                new StructField("TotalCharges", DataTypes.StringType, true, Metadata.empty()),
+        });
+
+        Dataset<Row> testData = spark.read()
+                .option("header", "false")
+                .schema(schema)
+                .csv("hdfs://localhost:9000/amine/input/data_client.csv");
+
+        // Clean and prepare data
+        testData = testData.filter("TotalCharges IS NOT NULL AND TotalCharges != ''")
+                .withColumn("TotalCharges", testData.col("TotalCharges").cast(DataTypes.DoubleType))
+                .na().drop();
+        testData = testData.withColumn("Churn", functions.lit("No"));
+
+        // Load the trained model from HDFS
+        PipelineModel model = PipelineModel.load("hdfs://localhost:9000/amine/model");
+
+        // Make predictions
+        Dataset<Row> predictions = model.transform(testData);
+        Dataset<Row> convertedDf = predictions.select("customerID", "prediction");
+
+        convertedDf.write()
+                .mode("overwrite")
+                .option("header", "true")
+                .csv("hdfs://localhost:9000/amine/churn_prediction");
+
+        Dataset<Row> finalPredictions = spark.read()
+                .option("header", "true")
+                .csv("hdfs://localhost:9000/amine/churn_prediction");
+
+        // Convert to ObservableList for JavaFX
+        ObservableList<ClientPrediction> clientPredictions = FXCollections.observableArrayList();
+        finalPredictions.collectAsList().forEach(row -> {
+            String clientID = row.getAs("customerID");
+            String prediction = row.getAs("prediction").toString();
+            clientPredictions.add(new ClientPrediction(clientID, prediction));
+        });
+
+        convertedDf.write()
+                .mode("overwrite")
+                .option("header", "true")
+                .csv("hdfs://localhost:9000/amine/churn_prediction");
+        predictions.select("customerID", "features", "probability", "prediction").show(10, false);
+       // clientsTable.setItems(clientPredictions);
+
+        spark.stop();
+    }
+
+    public void fetchDataFromDatabase() {
+        try {
+            String tableName = "clienttest";
+            String localCsvPath = "data_client.csv"; // Use full path for consistency
+            String relativePath = "src/main/resources/data_client.csv";
+            String hdfsPath = "hdfs://localhost:9000/amine/input/";
+
+            boolean exportSuccess = DbConnection.export2(tableName, localCsvPath);
+            System.out.println("Export Success: " + exportSuccess);
+           // System.out.println("CSV File Path: " + localCsvPath);
+            if (exportSuccess) {
+
+                fs = hadoopConf.getFileSystem();
+
+                File localFile = new File(relativePath);
+                if (!localFile.exists()) {
+                    System.err.println("Local file does not exist: " + relativePath);
+                    return;
+                } else {
+                    System.out.println("Local file exists: " + relativePath);
+                }
+
+                Path hdfsFilePath = new Path(hdfsPath + "/data_client.csv");  // Specify the file path in HDFS
+                Path localPath = new Path(relativePath);
+
+                // Check if the HDFS directory exists, and create it if it doesn't
+                Path inputPath = new Path(hdfsPath);
+                if (!fs.exists(inputPath)) {
+                    fs.mkdirs(inputPath);
+                    System.out.println("Created directory in HDFS: " + hdfsPath);
+                }
+
+                // Check if the file already exists in HDFS, and delete it if it does
+                if (fs.exists(hdfsFilePath)) {
+                    if (fs.delete(hdfsFilePath, false)) {  // Only delete the file (not the directory)
+                        System.out.println("Existing file deleted successfully from HDFS: " + hdfsFilePath);
+                    } else {
+                        System.out.println("Failed to delete the file from HDFS: " + hdfsFilePath);
+                    }
+                }
+
+                // Upload the file to HDFS
+                try {
+                    fs.copyFromLocalFile(localPath, hdfsFilePath);
+                    System.out.println("File uploaded to HDFS: " + hdfsFilePath);
+                } catch (IOException e) {
+                    System.err.println("Error uploading file to HDFS: " + e.getMessage());
+                    e.printStackTrace();
+                }
+
+            } else {
+                System.err.println("Failed to export data to CSV.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+}
+
+    /* public void runPredictionAndDisplay() {
+        try {
+            // Fetch predictions by running the Spark pipeline
+            Dataset<Row> predictions = runPredictionAndGetResults();
+
+            // Create an ObservableList to store formatted predictions
+            ObservableList<String> predictionItems = FXCollections.observableArrayList();
+
+            // Fetch all client names from the database
+            Map<String, String> clientNames = getAllClientNames();
+
+            // Map customerID to names and format predictions
+            predictions.collectAsList().forEach(row -> {
+                String customerId = row.getAs("customerID");
+                String name = clientNames.getOrDefault(customerId, "Unknown");
+                String prediction = row.getAs("prediction").toString();
+
+                String formattedPrediction = String.format("Name: %s, Prediction: %s", name, prediction);
+                predictionItems.add(formattedPrediction);
+            });
+
+            // Update the ListView on the JavaFX Application Thread
+            javafx.application.Platform.runLater(() -> predictionsListView.setItems(predictionItems));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Stop SparkSession after all operations
+            stopSparkSession();
+        }
+    }*/

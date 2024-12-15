@@ -16,6 +16,8 @@ import org.example.java_project.Service.UniqueUserCount;
 
 import java.util.HashMap;
 
+import static org.example.java_project.Service.DbConnection.getType;
+
 public class UniqueUserCountController {
 
     @FXML
@@ -48,7 +50,7 @@ public class UniqueUserCountController {
         }
     }
 
-    @FXML
+   /* @FXML
     private void initialize(ActionEvent actionEvent) {
         try {
             UniqueUserCount uniqueUserCount = new UniqueUserCount("UniqueUserCount", JobType.NORMAL);
@@ -70,8 +72,57 @@ public class UniqueUserCountController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }*/
+    @FXML
+    private void initialize() {
+        // Initialize table columns
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
+
+        // Load initial data
+        loadData();
     }
     @FXML
+    private void loadData() {
+        try {
+            // Clear previous data
+            lineChart.getData().clear();
+            tableView.getItems().clear();
+
+            // Fetch new data
+            UniqueUserCount uniqueUserCount = new UniqueUserCount("UniqueUserCount", JobType.NORMAL);
+            HashMap<String, Integer> result = uniqueUserCount.call(); // This gets the raw data with id and count
+
+            // Populate LineChart and TableView with type fetched from the database
+            ObservableList<Result> data = FXCollections.observableArrayList();
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+            for (String id : result.keySet()) {
+                String type = getType(id);  // Fetch type from the database based on the id
+                Integer count = result.get(id);
+
+                if (type != null) {  // If type is found, add it to the chart and table
+                    // Add to the chart
+                    series.getData().add(new XYChart.Data<>(type, count));
+
+                    // Add to the table
+                    data.add(new Result(type, count));
+                }
+            }
+
+            // Set chart data
+            lineChart.getData().add(series);
+
+            // Set table data
+            tableView.setItems(data);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+/*
     private void handleShowResults(ActionEvent actionEvent) {
         try {
             UniqueUserCount uniqueUserCount = new UniqueUserCount("UniqueUserCount", JobType.NORMAL);
@@ -93,5 +144,11 @@ public class UniqueUserCountController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+*/
+
+    private void handleShowResults(ActionEvent actionEvent) {
+        // Reload data on button click
+        loadData();
     }
 }

@@ -9,6 +9,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
@@ -49,6 +50,17 @@ public class ClientTypeCountController {
         runJob("ClientTypeCount", JobType.NORMAL);
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> filterData(newValue));
+
+        // Set row factory to handle row clicks
+        tableView.setRowFactory(tv -> {
+            TableRow<DataRecord> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty()) {
+                    row.setStyle("-fx-background-color: lightgray;"); // Change to desired color
+                }
+            });
+            return row;
+        });
     }
 
     @FXML

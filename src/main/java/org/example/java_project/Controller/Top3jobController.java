@@ -94,10 +94,10 @@ public class Top3jobController implements Initializable {
                 CategoryAxis xAxis2 = new CategoryAxis();
                 NumberAxis yAxis2 = new NumberAxis(0, 100, 10); // from 0 to 100 with tick unit of 10
                 yAxis2.setLabel("Percentage (%)");
-                xAxis2.setStyle("-fx-tick-label-fill: white; " +
+                xAxis2.setStyle("-fx-tick-label-fill: black; " +
                         "-fx-tick-label-font-size: 14px; " +
                         "-fx-tick-label-font-weight: bold;"); // X-axis text color
-                yAxis2.setStyle("-fx-tick-label-fill: white; " +
+                yAxis2.setStyle("-fx-tick-label-fill: black; " +
                         "-fx-tick-label-font-size: 14px; " +
                         "-fx-tick-label-font-weight: bold;");
 

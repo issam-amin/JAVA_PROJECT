@@ -3,21 +3,15 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="1183.0" style="-fx-background-color: #02030A;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.DashboardController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="1183.0" style="-fx-background-color: #e8dddd;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.DashboardController">
     <children>
-        <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="256.0" style="-fx-background-color: #05071F;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="256.0" style="-fx-background-color: #2a719d;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <ImageView fitHeight="73.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -26,7 +20,7 @@
                     <VBox.margin>
                         <Insets bottom="10.0" top="50.0" />
                     </VBox.margin></ImageView>
-                <Label text="Jimmy Fallon" textFill="#e7e5e5">
+                <Label style="-fx-font-weight: bold;-fx-font-size: 18px;" text="Jimmy Fallon" textFill="#e7e5e5">
                     <VBox.margin>
                         <Insets bottom="20.0" />
                     </VBox.margin>
@@ -97,7 +91,7 @@
                         <Insets left="50.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnSettings" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Settings">
+                <Button fx:id="btnSettings" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#SparkModel" prefHeight="42.0" prefWidth="259.0" stylesheets="@style.css" text="Settings">
                     <graphic>
                         <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -123,15 +117,15 @@
                 </Button>
             </children>
         </VBox>
-      <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="258.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-border-radius: none" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
              <VBox fx:id="typeIssue" prefHeight="200.0" prefWidth="100.0" />
              <VBox fx:id="top3job" prefHeight="200.0" prefWidth="100.0" />
-             <VBox fx:id="view" prefHeight="200.0" prefWidth="100.0" />
+             <VBox fx:id="view" prefHeight="200.0" prefWidth="895.0" />
          </children>
       </StackPane>
     </children>
-    <effect>
-        <DropShadow color="#1b1eeb" />
-    </effect>
+  <!--  <effect>
+        <DropShadow color="#fdfcfc" />
+    </effect>-->
 </AnchorPane>

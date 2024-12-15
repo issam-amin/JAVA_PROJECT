@@ -25,7 +25,7 @@
     -fx-stroke: none; /* Hides grid lines */
 }
 .tick-label {
-    -fx-fill: white;        /* Change the font color (optional) */
+    -fx-fill: black;        /* Change the font color (optional) */
     -fx-font-size: 14px;    /* Change the font size */
     -fx-font-weight: bold; /* Change the font weight (bold, normal, etc.) */
 }
@@ -57,17 +57,17 @@
 }
 
 #itemC{
-    -fx-background-color: #02030A;
+    -fx-background-color: transparent;
     -fx-background-radius: 5;
     -fx-background-insets: 0;
 }
 #itemC:hover{
-    -fx-background-color : #0A0E3F;
+    -fx-background-color : rgb(33, 50, 134);
 }
 
-.scroll-pane {
+/*.scroll-pane {
     -fx-background-color: #02030A;
-}
+}*/
 
 #exportAction{
     -fx-text-fill: white;

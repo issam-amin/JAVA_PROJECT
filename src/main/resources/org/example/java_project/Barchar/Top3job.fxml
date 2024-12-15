@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" prefHeight="707.0" prefWidth="1027.0" style="-fx-background-color: #02030A;" stylesheets="@../Style/barChart.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.Top3jobController">
+<VBox alignment="CENTER" prefHeight="707.0" prefWidth="1027.0" style="-fx-background-color: #f6f6f6;" stylesheets="@../Style/barChart.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.Top3jobController">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="284.0" prefWidth="799.0">
          <children>
@@ -59,7 +59,7 @@
       <Pane prefHeight="86.0" prefWidth="1027.0" VBox.vgrow="ALWAYS" />
       <VBox fx:id="List" alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
-            <HBox fx:id="itemC1" alignment="CENTER" maxWidth="-Infinity" prefHeight="50.0" spacing="80.0" style="-fx-background-color: #02030A; -fx-background-radius: 5; -fx-background-insets: 0;">
+            <HBox fx:id="itemC1" alignment="CENTER" maxWidth="-Infinity" prefHeight="50.0" spacing="80.0" style="-fx-background-color: transparent; -fx-background-radius: 5; -fx-background-insets: 0;">
                <children>
                   <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -69,18 +69,18 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </ImageView>
-                  <Label prefWidth="117.0" style="-fx-font-weight: bold;" text="Type" textFill="#b7c3d7" />
-                  <Label prefWidth="85.0" style="-fx-font-weight: bold;" text="Count" textFill="#b7c3d7">
+                  <Label prefWidth="117.0" style="-fx-font-weight: bold;" text="Type" textFill="#575757"/>
+                  <Label prefWidth="85.0" style="-fx-font-weight: bold;" text="Count" textFill="#575757">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Label>
-                  <Label prefWidth="62.0" style="-fx-font-weight: bold;" text="Date" textFill="#b7c3d7">
+                  <Label prefWidth="62.0" style="-fx-font-weight: bold;" text="Date" textFill="#575757">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Label>
-                  <Label prefWidth="33.0" style="-fx-font-weight: bold;" text="\%" textFill="#b7c3d7">
+                  <Label prefWidth="33.0" style="-fx-font-weight: bold;" text="\%" textFill="#575757">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -100,13 +100,13 @@
                      </children>
                   </HBox>
                </children>
-               <effect>
+             <!--  <effect>
                   <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
-               </effect>
+               </effect>-->
             </HBox>
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="285.0" prefWidth="1021.0" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="pnItems" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="311.0" style="-fx-background-color: #02030A;" />
+                  <VBox fx:id="pnItems" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="311.0" style="-fx-background-color: transparent;" />
                </content>
             </ScrollPane>
          </children>

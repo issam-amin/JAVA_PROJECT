@@ -1,15 +1,47 @@
 .button
 {
--fx-background-color : #05071F;
+-fx-background-color : #2A719DFF;
 -fx-text-fill : #e7e5e5;
 }
 
 .button:hover{
--fx-background-color : #10165F;
+-fx-background-color : #2a719d;
 }
 .button:pressed
 {
--fx-background-color : #1620A1;
+-fx-background-color : #0077ff;
+}
+/* VBox container style */
+VBox {
+    -fx-background-color: #2a719d; /* Background color */
+    -fx-padding: 20px; /* Padding around the VBox */
+    -fx-spacing: 15px; /* Spacing between child elements */
+}
+
+/* ImageView style */
+ImageView {
+    -fx-fit-height: 33px;
+    -fx-fit-width: 37px;
+    -fx-preserve-ratio: true;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.0, 2, 2); /* Shadow effect for image */
+}
+
+/* Label style */
+Label {
+    -fx-text-fill: #070805; /* Text color */
+    -fx-font-size: 18px; /* Font size */
+    -fx-font-weight: bold; /* Bold font weight */
+    -fx-alignment: CENTER; /* Centered text */
+    -fx-padding: 10px; /* Padding around the label */
+}
+/* Button Style */
+Button {
+    -fx-background-color: #4A90E2; /* Button background color */
+    -fx-text-fill: #ffffff; /* Text color */
+    -fx-font-size: 16px; /* Font size */
+    -fx-font-weight: bold; /* Bold font */
+    -fx-border-radius: 20px; /* Rounded corners */
+    -fx-cursor: hand; /* Hand cursor on hover */
 }
 /*
 

@@ -1,4 +1,45 @@
-/* pieChart.css */
+/* Style for pie chart data nodes */
+.chart-pie .chart-series-pie .default-color0.chart-pie-label {
+    -fx-pie-color: #3498db; /* Blue */
+}
+
+.chart-pie .chart-series-pie .default-color1.chart-pie-label {
+    -fx-pie-color: #e74c3c; /* Red */
+}
+
+.chart-pie .chart-series-pie .default-color2.chart-pie-label {
+    -fx-pie-color: #2ecc71; /* Green */
+}
+
+/* Add more colors if needed */
+.chart-pie .chart-series-pie .default-color3.chart-pie-label {
+    -fx-pie-color: #f1c40f; /* Yellow */
+}
+
+/* Tooltip style */
+.chart-pie .chart-series-pie .chart-pie-label {
+    -fx-font-family: 'Roboto', sans-serif;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+.chart-pie .chart-pie-label {
+     -fx-font-family: 'Roboto', sans-serif;
+     -fx-text-fill: white;
+     -fx-font-size: 20px;
+     -fx-font-weight: bold;
+ }
+
+
+/* Global Font Style */
+.button-primary, .date-picker, .combo-box, .chart-title {
+    -fx-font-family: 'Roboto', sans-serif; /* Applying global font family */
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+/* Button Primary */
 .button-primary {
     -fx-background-color: rgb(42, 113, 157); /* Blue with full opacity */
     -fx-text-fill: white;
@@ -12,32 +53,39 @@
     -fx-background-color: rgb(33, 50, 134); /* Darker blue */
 }
 
+/* Date Picker */
 .date-picker {
-    -fx-background-color: rgb(48, 141, 198); /* Another shade of blue */
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 5;
+    -fx-background-color: rgb(251, 251, 251); /* Another shade of blue */
+    -fx-border-radius: 10;
     -fx-background-radius: 5;
+    -fx-border-color: rgb(0, 119, 255);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 5;
+
 }
 
 .date-picker .arrow {
     -fx-background-color: rgb(0, 119, 255); /* Same blue as button */
 }
 
+/* Combo Box */
 .combo-box {
-    -fx-background-color: rgb(42, 113, 157); /* Same as DatePicker */
+    -fx-background-color: rgb(255, 255, 255); /* Same as DatePicker */
+    -fx-border-radius: 10;
+    -fx-border-color: rgb(0, 119, 255);
     -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-background-radius: 5;
-    -fx-padding: 5;
+    -fx-font-size: 20px;
+    -fx-padding: 2.5;
 }
 
 .combo-box .arrow {
-    -fx-background-color: rgb(71, 255, 206); /* Same blue as button */
+    -fx-background-color:rgb(0, 119, 255); /* Same blue as button */
 }
 
+/* Chart Title */
 .chart-title {
-    -fx-text-fill: #fdfcfc;
-    -fx-font-size: 25px;
+    -fx-text-fill: #575757;
+    -fx-font-size: 30px;
     -fx-font-weight: bold;
 }

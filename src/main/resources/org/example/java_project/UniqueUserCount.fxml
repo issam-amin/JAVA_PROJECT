@@ -1,27 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.UniqueUserCountController">
-    <LineChart fx:id="lineChart" title="Unique User Count" legendVisible="false">
-        <xAxis>
-            <CategoryAxis label="Type" />
-        </xAxis>
-        <yAxis>
-            <NumberAxis label="Count" />
-        </yAxis>
-    </LineChart>
-    <TableView fx:id="tableView">
-        <columns>
-            <TableColumn fx:id="typeColumn" text="Type" />
-            <TableColumn fx:id="countColumn" text="Count" />
-        </columns>
-    </TableView>
-    <Button text="Show Results" onAction="#handleShowResults"/>
+<!--
+<VBox alignment="CENTER" prefHeight="707.0" prefWidth="1027.0" spacing="20.0" stylesheets="@Style/table.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.UniqueUserCountController">
+    <HBox prefHeight="258.0" prefWidth="697.0" spacing="50.0">
+        <children>
+            <LineChart fx:id="lineChart" legendVisible="false" title="Unique User Count">
+                <xAxis>
+                    <CategoryAxis label="Type" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis label="Count" />
+                </yAxis>
+            </LineChart>
+            <TableView fx:id="tableView" prefHeight="132.0" prefWidth="444.0">
+                <columns>
+                    <TableColumn fx:id="typeColumn" text="Type" />
+                    <TableColumn fx:id="countColumn" text="Count" />
+                </columns>
+            </TableView>
+        </children>
+    </HBox>
+    <Button onAction="#handleShowResults" prefHeight="52.0" prefWidth="155.0" text="Show Results" />
+</VBox>
+-->
+
+<VBox alignment="CENTER" prefHeight="707.0" prefWidth="1027.0" spacing="20.0" stylesheets="@Style/uniqueclient.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.UniqueUserCountController">
+    <HBox alignment="CENTER" prefHeight="513.0" prefWidth="1011.0" spacing="50.0">
+        <children>
+            <LineChart fx:id="lineChart" legendVisible="false" style="-fx-background-color: #ffffff; -fx-padding: 10;" title="Unique User Count">
+                <xAxis>
+                    <CategoryAxis label="Type" style="-fx-text-fill: #2b2b2b; -fx-font-size: 14px;" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis label="Count" style="-fx-text-fill: #2b2b2b; -fx-font-size: 14px;" />
+                </yAxis>
+            </LineChart>
+            <TableView fx:id="tableView" prefHeight="413.0" prefWidth="522.0" style="-fx-border-color: #4A90E2; -fx-border-width: 2;">
+                <columns>
+                    <TableColumn fx:id="typeColumn" prefWidth="200" style="-fx-font-weight: bold; -fx-alignment: CENTER;" text="Type" />
+                    <TableColumn fx:id="countColumn" prefWidth="200" style="-fx-font-weight: bold; -fx-alignment: CENTER;" text="Count" />
+                </columns>
+            </TableView>
+
+        </children>
+      <padding>
+         <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+      </padding>
+    </HBox>
+    <Button onAction="#handleShowResults" prefHeight="52.0" prefWidth="155.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-border-radius: 10; -fx-background-radius: 10;" text="Show Results">
+    </Button>
 </VBox>

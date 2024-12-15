@@ -7,12 +7,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.example.java_project.Service.JobType;
 import org.example.java_project.Service.RectypeJob;
 import org.example.java_project.Service.UniqueUserCount;
 import org.example.java_project.Service.clientTypeJob;
+import org.joda.time.LocalDate;
 
 import java.io.IOException;
 import java.net.URL;
@@ -112,7 +114,7 @@ public class DashboardController implements Initializable {
 
             typeIssue.getChildren().clear();
             try {
-                typeIssue.setStyle("-fx-background-color : #53639F");
+                typeIssue.setStyle("-fx-background-color : #f6f6f6");
                 typeIssue.toFront();
                 Node RecType = FXMLLoader.load(getClass().getResource("../PieChart.fxml"));
                 typeIssue.getChildren().add(RecType);
@@ -150,7 +152,7 @@ public class DashboardController implements Initializable {
     void ClientTypeCount() {
         typeIssue.getChildren().clear();
         try {
-            typeIssue.setStyle("-fx-background-color : #53639F");
+            typeIssue.setStyle("-fx-background-color : #e6e2e2");
             typeIssue.toFront();
             Node node = FXMLLoader.load(getClass().getResource("../ClientTypeCount.fxml"));
             typeIssue.getChildren().add(node);
@@ -165,7 +167,7 @@ public class DashboardController implements Initializable {
     void UniqueUserCount() {
         typeIssue.getChildren().clear();
         try {
-            typeIssue.setStyle("-fx-background-color : #53639F");
+            typeIssue.setStyle("-fx-background-color : #f6f6f6");
             typeIssue.toFront();
             Node node = FXMLLoader.load(getClass().getResource("../UniqueUserCount.fxml"));
             typeIssue.getChildren().add(node);
@@ -175,6 +177,18 @@ public class DashboardController implements Initializable {
     }
 
 
+        @FXML
+        void SparkModel(ActionEvent actionEvent) {
+            typeIssue.getChildren().clear();
+            try {
+                typeIssue.setStyle("-fx-background-color : #ffffff");
+                typeIssue.toFront();
+                Node node = FXMLLoader.load(getClass().getResource("../Predictions.fxml"));
+                typeIssue.getChildren().add(node);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
 
 }

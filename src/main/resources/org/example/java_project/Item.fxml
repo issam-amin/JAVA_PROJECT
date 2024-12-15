@@ -18,18 +18,18 @@
                 <Insets left="10.0" />
             </HBox.margin>
         </ImageView>
-        <Label fx:id="id" prefHeight="17.0" prefWidth="117.0" text="KeepToo" textFill="#b7c3d7" />
-        <Label fx:id="count" prefHeight="17.0" prefWidth="85.0" text="JFK" textFill="#b7c3d7">
+        <Label fx:id="id" prefHeight="17.0" prefWidth="117.0" text="KeepToo" textFill="#575757" />
+        <Label fx:id="count" prefHeight="17.0" prefWidth="85.0" text="JFK" textFill="#575757">
             <HBox.margin>
                 <Insets />
             </HBox.margin>
         </Label>
-        <Label fx:id="countDate" text="10/11/2018" textFill="#b7c3d7">
+        <Label fx:id="countDate" text="10/11/2018" textFill="#575757">
             <HBox.margin>
                 <Insets />
             </HBox.margin>
         </Label>
-        <Label fx:id="percentage" prefHeight="17.0" prefWidth="33.0" text="\$200" textFill="#b7c3d7">
+        <Label fx:id="percentage" prefHeight="17.0" prefWidth="33.0" text="\$200" textFill="#575757">
             <HBox.margin>
                 <Insets />
             </HBox.margin>
@@ -40,7 +40,7 @@
             </HBox.margin>
         </Button>
     </children>
-    <effect>
+    <!--<effect>
         <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
-    </effect>
+    </effect>-->
 </HBox>

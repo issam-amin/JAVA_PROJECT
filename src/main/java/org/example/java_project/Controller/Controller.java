@@ -84,7 +84,7 @@ public class Controller {
             protected Integer call() {
                 int sum = 0;
                 try {
-                    fs = hadoopConf.getFileSystem();
+                    fs = hadoopConf.getFileSystem();  // Ensure fs is opened once here
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String currentDate = LocalDate.now().format(formatter);
                     String outputFilePath = "/test/output_" + currentDate + "_chart1/part-r-00000";
@@ -109,7 +109,6 @@ public class Controller {
                     } else {
                         System.out.println("Output file for the current day does not exist.");
                     }
-                    fs.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -120,6 +119,7 @@ public class Controller {
         task.setOnSucceeded(event -> IssueValue.set(task.getValue().toString()));
         new Thread(task).start();
     }
+
 
     private void getAllClients() {
         Task<String> task = new Task<>() {
@@ -150,7 +150,7 @@ public class Controller {
             protected Integer call() {
                 int sum = 0;
                 try {
-                    fs = hadoopConf.getFileSystem();
+                    fs = hadoopConf.getFileSystem(); // Ensure fs is opened once here
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     String currentDate = LocalDate.now().format(formatter);
                     String outputFilePath = "/test/output_" + currentDate + "_chart2/part-r-00000";
@@ -171,11 +171,9 @@ public class Controller {
                             }
                         }
                         reader.close();
-                        inputStream.close();
                     } else {
                         System.out.println("Output file for the current day does not exist.");
                     }
-                    fs.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -192,6 +190,25 @@ public class Controller {
         });
         new Thread(task).start();
     }
+
+    public static FileSystem getFS() {
+        if (fs == null) {
+            fs = hadoopConf.getFileSystem(); // Initialize fs
+        }
+        return fs;
+    }
+
+    public static void closeFS() {
+        try {
+            if (fs != null) {
+                fs.close();  // Close fs only once
+                fs = null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /*void listComplaints() {
         pnItems.getChildren().clear();
@@ -285,8 +302,8 @@ public class Controller {
                                 dateReclamation.contains(searchTerm)) {
                             Node node = FXMLLoader.load(getClass().getResource("../MyItems.fxml"));
 
-                            node.setOnMouseEntered(event -> node.setStyle("-fx-background-color: #0A0E3F"));
-                            node.setOnMouseExited(event -> node.setStyle("-fx-background-color: #02030A"));
+                            /*node.setOnMouseEntered(event -> node.setStyle("-fx-background-color: #0A0E3F"));
+                            node.setOnMouseExited(event -> node.setStyle("-fx-background-color: #02030A"));*/
 
                             int finalCount = count;
                             Platform.runLater(() -> {
