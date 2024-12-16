@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.example.java_project.Service.JobType;
 import org.example.java_project.Service.RectypeJob;
@@ -102,6 +103,7 @@ public class DashboardController implements Initializable {
                 top3job.setStyle("-fx-background-color : #02030A");
                 top3job.toFront();
                 Node node = FXMLLoader.load(getClass().getResource("../Barchar/Top3job.fxml"));
+                VBox.setVgrow(node, Priority.ALWAYS);
                 top3job.getChildren().add(node);
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -236,7 +236,7 @@ public class ClientChurnController {
                 .na().drop();
         testData = testData.withColumn("Churn", functions.lit("No"));
 
-        PipelineModel model = PipelineModel.load("hdfs://localhost:9000/amine/churn_prediction_model");
+        PipelineModel model = PipelineModel.load("hdfs://localhost:9000/test/churn_prediction_model");
 
         Dataset<Row> predictions = model.transform(testData)
                 .select("customerID", "prediction"); // Select the relevant columns
@@ -246,7 +246,7 @@ public class ClientChurnController {
         predictionsWithChurn.write()
                 .mode("overwrite")
                 .option("header", "true")
-                .csv("hdfs://localhost:9000/amine/churn_prediction");
+                .csv("hdfs://localhost:9000/test/churn_prediction");
 
         // Display predictions in the console
         predictionsWithChurn.show(10, false);
@@ -261,7 +261,7 @@ public class ClientChurnController {
             String tableName = "customer"; // Example table name
             String relativeCsvPath = "src/main/resources/data_client.csv";
             String localCsvPath = "data_client.csv";
-            String hdfsPath = "hdfs://localhost:9000/amine/input/data_client.csv";
+            String hdfsPath = "hdfs://localhost:9000/test/input/data_client.csv";
 
             boolean exportSuccess = DbConnection.export2(tableName, localCsvPath);
 

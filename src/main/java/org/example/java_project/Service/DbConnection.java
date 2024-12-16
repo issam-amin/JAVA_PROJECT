@@ -20,16 +20,16 @@ public class DbConnection {
         return connection;
     }*/
 public static Connection getConnection() {
-    Connection conn = null;
+    /*Connection conn = null;
     try {
         if (conn == null || conn.isClosed()) {
             // Establish a new connection if the old one is closed
-           conn =DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
+           conn  =  DriverManager.getConnection("jdbc:mysql://localhost:3306/claims", "root", "PHW#84#jeor");
         }
     } catch (SQLException e) {
         e.printStackTrace();
-    }
-    return conn;
+    }*/
+    return connection;
 }
 
 

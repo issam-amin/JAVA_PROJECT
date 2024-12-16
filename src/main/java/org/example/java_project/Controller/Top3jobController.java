@@ -76,10 +76,10 @@ public class Top3jobController implements Initializable {
         barChart = new BarChart<>(xAxis, yAxis);
         xAxis.setLabel("X-Axis");
         yAxis.setLabel("Y-Axis");
-        xAxis.setStyle("-fx-tick-label-fill: white; " +
+        xAxis.setStyle("-fx-tick-label-fill: black; " +
                 "-fx-tick-label-font-size: 14px; " +
                 "-fx-tick-label-font-weight: bold;"); // X-axis text color
-        yAxis.setStyle("-fx-tick-label-fill: white; " +
+        yAxis.setStyle("-fx-tick-label-fill: black; " +
                 "-fx-tick-label-font-size: 14px; " +
                 "-fx-tick-label-font-weight: bold;");
         XYChart.Series<String, Number> sampleSeries = new XYChart.Series<>();
