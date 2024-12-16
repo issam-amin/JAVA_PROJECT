@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<BorderPane prefHeight="434.0" prefWidth="571.0" styleClass="displayBox" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.PopupController">
+<BorderPane prefHeight="434.0" prefWidth="571.0" styleClass="displayBox" stylesheets="@Style/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.PopupController">
    <center>
        <VBox alignment="CENTER" prefHeight="382.0" prefWidth="590.0" spacing="10" BorderPane.alignment="CENTER">
            <padding>

@@ -76,9 +76,6 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        /*if (loggedInUser != null) {
-
-        }*/
         initializeView();
     }
 
@@ -119,6 +116,7 @@ public class DashboardController implements Initializable {
                 typeIssue.setStyle("-fx-background-color : #f6f6f6");
                 typeIssue.toFront();
                 Node RecType = FXMLLoader.load(getClass().getResource("../PieChart.fxml"));
+                VBox.setVgrow(RecType, Priority.ALWAYS);
                 typeIssue.getChildren().add(RecType);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -145,6 +143,7 @@ public class DashboardController implements Initializable {
             view.setStyle("-fx-background-color : #02030A");
             view.toFront();
             Node node = FXMLLoader.load(getClass().getResource("../Overview.fxml"));
+            VBox.setVgrow(node, Priority.ALWAYS);
             view.getChildren().add(node);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -157,6 +156,7 @@ public class DashboardController implements Initializable {
             typeIssue.setStyle("-fx-background-color : #e6e2e2");
             typeIssue.toFront();
             Node node = FXMLLoader.load(getClass().getResource("../ClientTypeCount.fxml"));
+            VBox.setVgrow(node, Priority.ALWAYS);
             typeIssue.getChildren().add(node);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -172,6 +172,7 @@ public class DashboardController implements Initializable {
             typeIssue.setStyle("-fx-background-color : #f6f6f6");
             typeIssue.toFront();
             Node node = FXMLLoader.load(getClass().getResource("../UniqueUserCount.fxml"));
+            VBox.setVgrow(node, Priority.ALWAYS);
             typeIssue.getChildren().add(node);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -186,6 +187,7 @@ public class DashboardController implements Initializable {
                 typeIssue.setStyle("-fx-background-color : #ffffff");
                 typeIssue.toFront();
                 Node node = FXMLLoader.load(getClass().getResource("../Predictions.fxml"));
+                VBox.setVgrow(node, Priority.ALWAYS);
                 typeIssue.getChildren().add(node);
             } catch (IOException e) {
                 throw new RuntimeException(e);

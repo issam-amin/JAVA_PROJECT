@@ -14,7 +14,7 @@
 
 <VBox prefHeight="707.0" prefWidth="924.0" style="-fx-background-color: #fdfcfc; -fx-border-radius: none" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.Controller">
 
-    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER" >
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
         <children>
             <Label minWidth="-Infinity" prefHeight="35.0" prefWidth="188.0" text="Welcome Admin" textFill="#080808" HBox.hgrow="NEVER">
                 <font>
@@ -90,9 +90,9 @@
             </VBox>
         </children>
     </HBox>
-    <VBox alignment="TOP_CENTER" prefHeight="519.0" prefWidth="924.0">
+    <VBox alignment="CENTER" prefHeight="519.0" prefWidth="924.0">
         <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="68.0" prefWidth="924.0" spacing="20.0" VBox.vgrow="NEVER">
+            <HBox alignment="CENTER" prefHeight="53.0" prefWidth="924.0" spacing="20.0" VBox.vgrow="NEVER">
                 <children>
                     <Label text="Limit Issues Displayed:" textFill="#111111">
                         <font>
@@ -106,7 +106,7 @@
                 </padding>
             </HBox>
 
-            <HBox fx:id="itemC1" alignment="CENTER" maxWidth="-Infinity" prefHeight="0.0" prefWidth="895.0" spacing="30.0" style="-fx-background-color: transparent; -fx-background-radius: 0; -fx-background-insets: 0; -fx-font-weight:900 ;-fx-font-size: 16.0;-fx-font-family: 'Arial', sans-serif" VBox.vgrow="ALWAYS">
+            <HBox fx:id="itemC1" alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="63.0" prefWidth="924.0" spacing="30.0" style="-fx-background-color: transparent; -fx-background-radius: 0; -fx-background-insets: 0; -fx-font-weight:900 ;-fx-font-size: 16.0;-fx-font-family: 'Arial', sans-serif">
                 <!--<effect>
                     <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
                 </effect>-->
@@ -149,49 +149,9 @@
                     </HBox.margin>
                 </Button>
             </HBox>
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="285.0" prefWidth="1021.0" stylesheets="@style.css" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="285.0" prefWidth="1021.0" stylesheets="@Style/style.css" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                 <content>
-                    <VBox fx:id="pnItems" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="345.0" prefWidth="949.0" spacing="20.0" style="-fx-background-color: #fdfcfc; -fx-border-color: #FDFCFCFF; -fx-border-radius: 0; -fx-background-radius: 0;-fx-text-fill: #0000FF;">
-                        <HBox fx:id="itemC" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="68.0" prefWidth="922.0" spacing="50.0" style="-fx-background-color: transaparent; -fx-background-radius: 5; -fx-background-insets: 0;">
-                            <children>
-                                <ImageView fitHeight="31.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                    <HBox.margin>
-                                        <Insets left="10.0" />
-                                    </HBox.margin>
-                                    <Image url="@../images/icons8_GPS_Antenna_64px_1.png" />
-                                </ImageView>
-                                <Label prefHeight="17.0" prefWidth="81.0" text="Lewis Dakota" textFill="#b7c3d7" />
-                                <!-- <Label text="CNE017" textFill="#b7c3d7">
-                                     <HBox.margin>
-                                                              <Insets />
-                                                          </HBox.margin>
-                                                      </Label>-->
-                                <Label text="Sample reclamation text for problem ProblemType12 from client CNE017" textFill="#b7c3d7">
-                                    <HBox.margin>
-                                        <Insets />
-                                    </HBox.margin>
-                                </Label>
-                                <Label prefHeight="17.0" prefWidth="150.0" text="2024-11-02" textFill="#b7c3d7">
-                                    <HBox.margin>
-                                        <Insets />
-                                    </HBox.margin>
-                                </Label>
-                                <!--<Label text="App" textFill="#b7c3d7">
-                                    <HBox.margin>
-                                                             <Insets />
-                                                         </HBox.margin>
-                                                     </Label>-->
-                                <Button mnemonicParsing="false" prefHeight="10.0" prefWidth="60.0" style="-fx-border-color: #2A73FF; -fx-border-radius: 20; -fx-background-color: transparent;" stylesheets="@style.css" text="Show ">
-                                    <HBox.margin>
-                                        <Insets />
-                                    </HBox.margin>
-                                </Button>
-                            </children>
-                       <!--     <effect>
-                                <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
-                                        </effect>-->
-                        </HBox>
-                    </VBox>
+                    <VBox fx:id="pnItems" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" spacing="20.0" style="-fx-background-color: #fdfcfc; -fx-border-color: #FDFCFCFF; -fx-border-radius: 0; -fx-background-radius: 0;-fx-text-fill: #0000FF;" />
                 </content>
             </ScrollPane>
         </children>
