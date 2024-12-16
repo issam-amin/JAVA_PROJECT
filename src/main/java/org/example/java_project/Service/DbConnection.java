@@ -8,29 +8,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DbConnection {
-    static final Connection connection;
-    static {
+    static Connection connection;
+
+    public static Connection getConnection() {
         try {
-            connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
-        }catch  (SQLException e) {
+            if(connection == null || connection.isClosed()) {
+                try {
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-/*    public static Connection getConnection() {
         return connection;
-    }*/
-public static Connection getConnection() {
-    Connection conn = null;
-    try {
-        if (conn == null || conn.isClosed()) {
-            // Establish a new connection if the old one is closed
-           conn =DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
     }
-    return conn;
-}
+
 
 
 
