@@ -47,6 +47,9 @@ public class ClientChurnController {
         customerIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get("customerId")));
         fullNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get("fullName")));
         predictionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get("prediction")));
+        customerIdColumn.setCellFactory(this::defaultCellFactory);
+        fullNameColumn.setCellFactory(this::defaultCellFactory);
+        predictionColumn.setCellFactory(this::defaultCellFactory);
 
         // Add click event to the 'fullNameColumn'
         fullNameColumn.setCellFactory(tc -> {
@@ -118,6 +121,22 @@ public class ClientChurnController {
         }
         return clientDetails;
     }
+    TableCell<Map<String, String>, String> defaultCellFactory(TableColumn<Map<String, String>, String> column) {
+        return new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null || item.trim().isEmpty()) {
+                    setText(null);
+                    setStyle("-fx-opacity: 0;"); // Hides empty cells
+                } else {
+                    setText(item);
+                    setStyle(""); // Reset style for non-empty cells
+                }
+            }
+        };
+    }
+
 
     /**
      * Displays the client's details in a popup.
@@ -139,28 +158,53 @@ public class ClientChurnController {
             Dataset<Row> predictions = runPredictionAndGetResults();
 
             ObservableList<Map<String, String>> predictionItems = FXCollections.observableArrayList();
-
             Map<String, String> clientNames = getAllClientNames();
 
+            // Process data and filter rows
             predictions.collectAsList().forEach(row -> {
                 String customerId = row.getAs("customerID");
                 String name = clientNames.getOrDefault(customerId, "Unknown");
                 Double predictionValue = row.getAs("prediction");
 
-                if (predictionValue == 1.0) {
+                if (predictionValue == 1.0 && customerId != null && !customerId.trim().isEmpty()) {
                     Map<String, String> rowMap = new HashMap<>();
                     rowMap.put("customerId", customerId);
                     rowMap.put("fullName", name);
-                    rowMap.put("prediction", "Leave");
-
+                    rowMap.put("prediction", "Probability of Leave");
                     predictionItems.add(rowMap);
                 }
             });
 
+            // Update TableView on the JavaFX thread
             javafx.application.Platform.runLater(() -> {
+                customerPredictionTableView.getItems().clear(); // Clear existing data
                 customerPredictionTableView.setItems(predictionItems);
 
-                // Style the "prediction" column
+                // Enhance the TableView style
+                customerPredictionTableView.setStyle(
+                        "-fx-font-family: 'Arial'; " +
+                                "-fx-font-size: 14px; " +
+                                "-fx-background-color: #f9f9f9; " +
+                                "-fx-border-color: #dcdcdc; " +
+                                "-fx-border-width: 1px;"
+                );
+
+                // Styling for fullName column
+                fullNameColumn.setCellFactory(column -> new TableCell<>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                            setStyle("");
+                        } else {
+                            setText(item);
+                            setStyle("-fx-font-weight: bold; -fx-text-fill: #333333;");
+                        }
+                    }
+                });
+
+                // Styling for prediction column
                 predictionColumn.setCellFactory(column -> new TableCell<>() {
                     @Override
                     protected void updateItem(String item, boolean empty) {
@@ -170,17 +214,11 @@ public class ClientChurnController {
                             setStyle("");
                         } else {
                             setText(item);
-                            if ("Leave".equals(item)) {
-                                setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-                            } else {
-                                setStyle(""); // Reset style for other cases
-                            }
+                            setStyle("-fx-font-weight: bold; -fx-text-fill: red;");
                         }
                     }
                 });
             });
-
-            javafx.application.Platform.runLater(() -> customerPredictionTableView.setItems(predictionItems));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,6 +226,8 @@ public class ClientChurnController {
             stopSparkSession();
         }
     }
+
+
 
     private void stopSparkSession() {
         SparkSession spark = SparkSessionSingleton.getInstance();
