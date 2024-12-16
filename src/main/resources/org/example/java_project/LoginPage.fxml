@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="574.0" prefWidth="884.0" styleClass="login_container" stylesheets="@Style/Login.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="574.0" prefWidth="884.0" styleClass="login_container" stylesheets="@Style/Login.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Auth.LoginController">
     <children>
         <VBox layoutX="-28.0" prefHeight="574.0" prefWidth="399.0" styleClass="login_image_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-28.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -21,10 +21,10 @@
                 </ImageView>
             </children>
         </VBox>
-        <VBox layoutX="388.0" layoutY="141.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="306.0" prefWidth="425.0" styleClass="login_form_container" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="388.0" AnchorPane.rightAnchor="71.0" AnchorPane.topAnchor="141.0">
+        <VBox layoutX="415.0" layoutY="142.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="425.0" styleClass="login_form_container" AnchorPane.bottomAnchor="122.0" AnchorPane.leftAnchor="415.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="142.0">
             <children>
-                <TextField fx:id="usernameField" promptText="User Name" snapToPixel="false" styleClass="login_form_input_fields" />
-                <PasswordField fx:id="passwordField" promptText="Password" styleClass="login_form_input_fields" />
+                <TextField fx:id="usernameField" promptText="User Name" snapToPixel="false" styleClass="login_form_input_fields" text="mehdi@gmail.com" />
+                <PasswordField fx:id="passwordField" promptText="Password" styleClass="login_form_input_fields" text="123" />
                 <HBox alignment="CENTER" prefHeight="40.0" prefWidth="371.0">
                     <children>
                         <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" styleClass="login_form_button" text="Log in">
@@ -43,5 +43,6 @@
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login_form_label" text="Welcome" />
             </children>
         </HBox>
+      <HBox fx:id="label_progress" alignment="CENTER" layoutX="415.0" layoutY="438.0" prefHeight="37.0" prefWidth="425.0" />
     </children>
 </AnchorPane>
