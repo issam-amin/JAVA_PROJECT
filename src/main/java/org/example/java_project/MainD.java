@@ -8,27 +8,24 @@ import javafx.stage.Stage;
 
 public class MainD extends Application {
     private double x, y;
-    private static Stage primaryStage;
+    public static Stage primaryStage;
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
          //Parent root = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
-             Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
         primaryStage.setScene(new Scene(root));
 
         // Set stage borderless
-
         // Add dragging functionality
         root.setOnMousePressed(event -> {
             x = event.getSceneX();
             y = event.getSceneY();
         });
-
         root.setOnMouseDragged(event -> {
             primaryStage.setX(event.getScreenX() - x);
             primaryStage.setY(event.getScreenY() - y);
         });
-
         primaryStage.show();
     }
 

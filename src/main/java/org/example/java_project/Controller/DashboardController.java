@@ -11,6 +11,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.example.java_project.Auth.LogoutController;
 import org.example.java_project.Service.JobType;
 import org.example.java_project.Service.RectypeJob;
 import org.example.java_project.Service.UniqueUserCount;
@@ -22,7 +23,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-import static org.example.java_project.Controller.LoginController.loggedInUser;
+
 
 public class DashboardController implements Initializable {
     @FXML
@@ -138,7 +139,7 @@ public class DashboardController implements Initializable {
             }
         }*/
 
-@FXML
+     @FXML
      void overview() {
         view.getChildren().clear();
         try {
@@ -192,5 +193,16 @@ public class DashboardController implements Initializable {
             }
         }
 
+
+        @FXML
+
+        public void signOut()  {
+
+            try {
+                LogoutController.logout();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
 }
