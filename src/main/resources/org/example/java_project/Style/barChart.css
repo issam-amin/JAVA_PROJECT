@@ -45,13 +45,7 @@
     -fx-background-color:#10165F ;
 }
 
-#ActionButton{
-    -fx-border-color:  #2A73FF;
-    -fx-border-radius : 30;
-    -fx-background-color : transparent;
-    -fx-font-weight: 500;
-    -fx-text-fill: white;
-}
+
 #ActionButton:hover{
     -fx-background-color : #2A73FF;
 }

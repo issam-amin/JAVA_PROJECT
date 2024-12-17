@@ -2,6 +2,7 @@ package org.example.java_project.Auth;
 
 
 
+import org.apache.hadoop.classification.InterfaceAudience;
 import org.example.java_project.Service.DbConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -45,6 +46,28 @@ public class SessionManager {
 
     public void setUserId(int userId) {
         UserId = userId;
+    }
+
+    public String UserName (){
+
+        try {
+            Connection  connection =DbConnection.getConnection();
+            String sql = " SELECT prenom  from admin where id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,getUserId());
+             ResultSet res = preparedStatement.executeQuery();
+             String UserName = null;
+             while (res.next()){
+                UserName = res.getString("Prenom");
+             }
+
+            return UserName;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
     }
 
 

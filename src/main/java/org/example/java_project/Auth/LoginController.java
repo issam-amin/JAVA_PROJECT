@@ -76,7 +76,6 @@ public class LoginController{
                             System.out.println(loader.getLocation());
                             Parent root = loader.load();
                             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
                             stage.setScene(new Scene(root));
                             stage.setFullScreen(true);
                             stage.centerOnScreen();
