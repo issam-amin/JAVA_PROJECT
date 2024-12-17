@@ -26,8 +26,9 @@ import java.util.ResourceBundle;
 
 
 public class DashboardController implements Initializable {
+
     @FXML
-    private VBox view;
+    private VBox overview;
     @FXML
     private VBox typeIssue;
     @FXML
@@ -50,7 +51,7 @@ public class DashboardController implements Initializable {
     private Button btnPackages;
 
     @FXML
-    private Button btnSettings;
+    private Button btnPrediction;
 
     @FXML
     private Button btnSignout;
@@ -81,12 +82,13 @@ public class DashboardController implements Initializable {
     }
 
     private void initializeView() {
-        view.getChildren().clear();
+        overview.getChildren().clear();
         try {
-            view.setStyle("-fx-background-color: #02030A");
-            view.toFront();
+            overview.setStyle("-fx-background-color: #02030A");
+            overview.toFront();
             Node node = FXMLLoader.load(getClass().getResource("../Overview.fxml"));
-            view.getChildren().add(node);
+            VBox.setVgrow(node, Priority.ALWAYS);
+            overview.getChildren().add(node);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -139,16 +141,7 @@ public class DashboardController implements Initializable {
 
      @FXML
      void overview() {
-        view.getChildren().clear();
-        try {
-            view.setStyle("-fx-background-color : #02030A");
-            view.toFront();
-            Node node = FXMLLoader.load(getClass().getResource("../Overview.fxml"));
-            VBox.setVgrow(node, Priority.ALWAYS);
-            view.getChildren().add(node);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+      initializeView();
     }
     @FXML
     void ClientTypeCount() {

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="707.0" prefWidth="924.0" style="-fx-background-color: #fdfcfc; -fx-border-radius: none" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.Controller">
+<VBox prefHeight="707.0" prefWidth="1027.0" style="-fx-background-color: #fdfcfc; -fx-border-radius: none" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.Controller">
 
     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
         <children>

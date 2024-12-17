@@ -3,8 +3,10 @@ package org.example.java_project.Controller;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -16,6 +18,7 @@ import org.example.java_project.Service.SparkSessionSingleton;
 import org.example.java_project.Service.hadoopConf;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -39,11 +42,19 @@ public class ClientChurnController {
     private TableColumn<Map<String, String>, String> fullNameColumn;
     @FXML
     private TableColumn<Map<String, String>, String> predictionColumn;
+    @FXML
+    HBox loader;
 
 
 
     @FXML
     public void initialize() {
+
+
+       ProgressIndicator progressIndicator = new com.gluonhq.charm.glisten.control.ProgressIndicator();
+        loader.getChildren().clear();
+        loader.getChildren().add(progressIndicator);
+
         customerIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get("customerId")));
         fullNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get("fullName")));
         predictionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get("prediction")));
@@ -76,7 +87,22 @@ public class ClientChurnController {
             return cell;
         });
 
-        new Thread(this::runPredictionAndDisplay).start();
+
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                runPredictionAndDisplay();
+                return null;
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            loader.getChildren().clear();
+        });
+
+        Thread thread = new Thread(task);
+        thread.start();
+       /* new Thread(this::runPredictionAndDisplay).start();*/
     }
 
     /**
@@ -121,6 +147,9 @@ public class ClientChurnController {
         }
         return clientDetails;
     }
+
+
+
     TableCell<Map<String, String>, String> defaultCellFactory(TableColumn<Map<String, String>, String> column) {
         return new TableCell<>() {
             @Override
@@ -190,7 +219,7 @@ public class ClientChurnController {
                 );
 
                 // Styling for fullName column
-                fullNameColumn.setCellFactory(column -> new TableCell<>() {
+               /* fullNameColumn.setCellFactory(column -> new TableCell<>() {
                     @Override
                     protected void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
@@ -202,7 +231,7 @@ public class ClientChurnController {
                             setStyle("-fx-font-weight: bold; -fx-text-fill: #333333;");
                         }
                     }
-                });
+                });*/
 
                 // Styling for prediction column
                 predictionColumn.setCellFactory(column -> new TableCell<>() {
@@ -224,6 +253,7 @@ public class ClientChurnController {
             e.printStackTrace();
         } finally {
             stopSparkSession();
+
         }
     }
 

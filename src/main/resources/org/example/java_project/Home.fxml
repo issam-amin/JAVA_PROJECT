@@ -91,11 +91,11 @@
                         <Insets left="50.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnSettings" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#SparkModel" prefHeight="42.0" prefWidth="259.0" stylesheets="@Style/style.css" text="Settings">
+                <Button fx:id="btnPrediction" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#SparkModel" prefHeight="42.0" prefWidth="259.0" stylesheets="@Style/style.css" text="Model Prediction">
                     <graphic>
-                        <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="false">
                             <image>
-                                <Image url="@../images/icons8_Slider__32px.png" />
+                                <Image url="@../images/Model.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -103,7 +103,7 @@
                         <Insets left="50.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnSignout" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="259.0" stylesheets="@Style/style.css" text="Sign Out">
+                <Button fx:id="btnSignout" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#signOut" prefHeight="42.0" prefWidth="259.0" stylesheets="@Style/style.css" text="Sign Out">
                     <graphic>
                         <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -121,7 +121,7 @@
          <children>
              <VBox fx:id="typeIssue" prefHeight="200.0" prefWidth="100.0" />
              <VBox fx:id="top3job" prefHeight="200.0" prefWidth="100.0" />
-             <VBox fx:id="view" prefHeight="200.0" prefWidth="895.0" />
+             <VBox fx:id="overview" prefHeight="200.0" prefWidth="100.0" />
          </children>
       </StackPane>
     </children>

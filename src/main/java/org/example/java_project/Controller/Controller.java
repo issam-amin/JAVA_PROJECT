@@ -295,7 +295,8 @@ public class Controller {
                         String client = complaints.getString("Client").toLowerCase();
                         String recText = complaints.getString("Rec_Text").toLowerCase();
                         String dateReclamation = complaints.getString("date_Reclamation").toLowerCase();
-
+                        String status = complaints.getString("status_Rec");
+                        String idClient = complaints.getString("id_C");
                         // Check if the search term matches the client name, rec text, or any part of the date
                         if (client.contains(searchTerm) ||
                                 recText.contains(searchTerm) ||
@@ -331,8 +332,9 @@ public class Controller {
 
                                     Button activeButton = (Button) ((Parent) node).lookup("#activeButton");
                                     if (activeButton != null) {
-                                        activeButton.setOnAction(event -> openPopupWindow(client, recText, dateReclamation));
+                                        activeButton.setOnAction(event -> openPopupWindow(client, recText, dateReclamation, status , idClient));
                                     }
+
 
                                     pnItems.getChildren().add(node);
                                 } catch (Exception e) {
@@ -357,13 +359,13 @@ public class Controller {
 
 
 
-    private void openPopupWindow(String client, String recText, String dateReclamation) {
+    private void openPopupWindow(String client, String recText, String dateReclamation, String status , String idClient) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../Popup.fxml"));
             Parent root = loader.load();
 
             PopupController controller = loader.getController();
-            controller.setMessage(client, recText, dateReclamation);
+            controller.setMessage(client, recText, dateReclamation, status, idClient);
 
             Stage popupStage = new Stage();
             popupStage.initModality(Modality.APPLICATION_MODAL);
@@ -374,6 +376,7 @@ public class Controller {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     public void applyLimitFilter() {
