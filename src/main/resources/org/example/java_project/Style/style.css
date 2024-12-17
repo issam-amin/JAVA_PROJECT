@@ -12,11 +12,7 @@
 -fx-background-color : #0077ff;
 }
 /* VBox container style */
-VBox {
-    -fx-background-color: #2a719d; /* Background color */
-    -fx-padding: 20px; /* Padding around the VBox */
-    -fx-spacing: 15px; /* Spacing between child elements */
-}
+
 
 /* ImageView style */
 ImageView {
@@ -34,47 +30,60 @@ Label {
     -fx-alignment: CENTER; /* Centered text */
     -fx-padding: 10px; /* Padding around the label */
 }
-/* Button Style */
 Button {
-    -fx-background-color: #4A90E2; /* Button background color */
-    -fx-text-fill: #ffffff; /* Text color */
-    -fx-font-size: 16px; /* Font size */
+    -fx-background-color : #0048ff;
+    -fx-text-fill : #e7e5e5;
+        -fx-font-size: 16px; /* Font size */
     -fx-font-weight: bold; /* Bold font */
     -fx-border-radius: 20px; /* Rounded corners */
     -fx-cursor: hand; /* Hand cursor on hover */
 }
-/*
-
-.scroll-pane {
-    -fx-background-color: #02030A;
-}
-
-.scroll-bar:horizontal, .scroll-bar:vertical{
-    -fx-background-color:transparent;
-}
-
-.increment-button, .decrement-button {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-}
-
-.scroll-bar:horizontal .track,
-.scroll-bar:vertical .track{
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-background-radius: 0em;
-}
-
-.scroll-bar:horizontal .thumb,
-.scroll-bar:vertical .thumb {
-    -fx-background-color: #10165F;
-    -fx-background-radius: 5em;
-}
-
-.scroll-pane > .corner {
-    -fx-background-color: black;
-}
+/*POPUP*/
+/* style.css */
 .displayBox {
-    -fx-background-color: #c3bebe;
+    -fx-background-color: #f9f9f9;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
 }
-*/
+
+.textContainer {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #000000;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+    -fx-max-width: 500px; /* Adjust the width as needed */
+    -fx-max-height: 200px; /* Adjust the height as needed */
+}
+
+.messageTextFlow {
+    -fx-padding: 10px;
+}
+.styledComboBox {
+    -fx-font-size: 14px;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2A73FF;
+    -fx-border-width: 2px;
+    -fx-padding: 5px;
+}
+
+.styledComboBox .list-cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #2A73FF;
+}
+
+.styledComboBox .list-cell:hover {
+    -fx-background-color: #2A73FF;
+    -fx-text-fill: #ffffff;
+}
+
+.styledComboBox .combo-box-popup {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2A73FF;
+    -fx-border-width: 2px;
+}
+
+
+

@@ -7,8 +7,7 @@
 
 <HBox fx:id="itemC" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="924.0" spacing="30.0" style="-fx-font-family: 'Arial', sans-serif; -fx-font-weight: 800; -fx-text-fill: #000000;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <!-- Label to display incrementing issue count -->
-        <Label fx:id="issueNumber" prefHeight="31.0" prefWidth="25.0" style="-fx-font-size: 25px; " text="1" textFill="#11d708">
+        <Label fx:id="issueNumber" prefHeight="35.0" prefWidth="53.0" style="-fx-font-size: 25px; " text="1" textFill="#11d708">
             <HBox.margin>
                 <Insets left="10.0" />
             </HBox.margin>

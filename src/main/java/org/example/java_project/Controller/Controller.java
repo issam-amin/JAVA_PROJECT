@@ -4,10 +4,8 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -33,12 +31,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.example.java_project.Service.ComplaintService.getComplainte;
 
 public class Controller {
-    static FileSystem fs ;
+    static FileSystem fs;
     public HBox itemC1;
     public HBox itemC;
     public TextField search_bar;
@@ -61,7 +60,7 @@ public class Controller {
     private final StringProperty IssueValue = new SimpleStringProperty("None");
     private final StringProperty CompletedIssuesValue = new SimpleStringProperty("None");
     private final StringProperty PendingIssuesValue = new SimpleStringProperty("None");
-
+    private final Set<String> addedComplaints = new HashSet<>();
     @FXML
     private void initialize() {
         getAllIssues();
@@ -74,7 +73,6 @@ public class Controller {
         PendingIssues.textProperty().bind(PendingIssuesValue);
         listComplaints(0);
 
-        // Add listener to search bar
         search_bar.textProperty().addListener((observable, oldValue, newValue) -> listComplaints(0));
     }
 
@@ -119,7 +117,6 @@ public class Controller {
         task.setOnSucceeded(event -> IssueValue.set(task.getValue().toString()));
         new Thread(task).start();
     }
-
 
     private void getAllClients() {
         Task<String> task = new Task<>() {
@@ -191,158 +188,71 @@ public class Controller {
         new Thread(task).start();
     }
 
-    public static FileSystem getFS() {
-        if (fs == null) {
-            fs = hadoopConf.getFileSystem(); // Initialize fs
-        }
-        return fs;
-    }
 
-    public static void closeFS() {
-        try {
-            if (fs != null) {
-                fs.close();  // Close fs only once
-                fs = null;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    // Track added complaints across multiple calls to listComplaints
 
 
-    /*void listComplaints() {
-        pnItems.getChildren().clear();
-
-        Task<Void> task = new Task<>() {
-            @Override
-            protected Void call() {
-                try {
-                    ResultSet complaints = getComplainte();
-                    String searchTerm = search_bar.getText().toLowerCase();
-
-                    while (complaints.next()) {
-                        String client = complaints.getString("Client").toLowerCase();
-                        String recText = complaints.getString("Rec_Text").toLowerCase();
-                        String dateReclamation = complaints.getString("date_Reclamation").toLowerCase();
-
-                        // Check if the search term matches the client name, rec text, or any part of the date
-                        if (client.contains(searchTerm) ||
-                                recText.contains(searchTerm) ||
-                                dateReclamation.contains(searchTerm)) {
-                            Node node = FXMLLoader.load(getClass().getResource("../MyItems.fxml"));
-
-                            node.setOnMouseEntered(event -> node.setStyle("-fx-background-color: #0A0E3F"));
-                            node.setOnMouseExited(event -> node.setStyle("-fx-background-color: #02030A"));
-
-                            Platform.runLater(() -> {
-                                try {
-                                    Label label = (Label) ((Parent) node).lookup("#Client");
-                                    if (label != null) {
-                                        label.setText(client);
-                                    }
-
-                                    label = (Label) ((Parent) node).lookup("#Rec_Text");
-                                    if (label != null) {
-                                        label.setText(recText);
-                                    }
-
-                                    label = (Label) ((Parent) node).lookup("#date_Reclamation");
-                                    if (label != null) {
-                                        label.setText(dateReclamation);
-                                    }
-
-                                    Button activeButton = (Button) ((Parent) node).lookup("#activeButton");
-                                    if (activeButton != null) {
-                                        activeButton.setOnAction(event -> openPopupWindow(client, recText, dateReclamation));
-                                    }
-
-                                    pnItems.getChildren().add(node);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            });
-                        }
-                    }
-                } catch (SQLException | IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        };
-
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
-    }*/
     void listComplaints(int limit) {
-        pnItems.getChildren().clear();
+        pnItems.getChildren().clear();  // Clear the displayed items.
+        addedComplaints.clear();        // Reset the duplicate tracking set.
 
-        // If no limit is provided (limit is 0 or negative), set it to 20
         if (limit <= 0) {
-            limit = 20;
+            limit = 20; // Default limit if no value is specified
         }
 
-        int finalLimit = limit;
+        int finalLimit = limit;  // Capture limit for use inside the task
+
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
                 try {
                     ResultSet complaints = getComplainte();
                     String searchTerm = search_bar.getText().toLowerCase();
-                    int count = 0; // Counter for the number of complaints displayed
+                    int count = 0;  // Counter to track the number of complaints displayed
 
-                    while (complaints.next() && (finalLimit == 0 || count < finalLimit)) {
+                    while (complaints.next() && count < finalLimit) {
                         String client = complaints.getString("Client").toLowerCase();
                         String recText = complaints.getString("Rec_Text").toLowerCase();
                         String dateReclamation = complaints.getString("date_Reclamation").toLowerCase();
                         String status = complaints.getString("status_Rec");
                         String idClient = complaints.getString("id_C");
-                        // Check if the search term matches the client name, rec text, or any part of the date
-                        if (client.contains(searchTerm) ||
-                                recText.contains(searchTerm) ||
-                                dateReclamation.contains(searchTerm)) {
+                        String idReclamation = complaints.getString("id_R"); // Fetch ID
+
+                        String complaintKey = client + recText + dateReclamation;
+
+                        // Filter complaints based on search term
+                        if ((client.contains(searchTerm) || recText.contains(searchTerm) || dateReclamation.contains(searchTerm))
+                                && addedComplaints.add(complaintKey)) {
+
+                            count++;  // Increment the counter as we add a complaint
+
                             Node node = FXMLLoader.load(getClass().getResource("../MyItems.fxml"));
-
-                            /*node.setOnMouseEntered(event -> node.setStyle("-fx-background-color: #0A0E3F"));
-                            node.setOnMouseExited(event -> node.setStyle("-fx-background-color: #02030A"));*/
-
-                            int finalCount = count;
                             Platform.runLater(() -> {
                                 try {
-                                    // Get the issue number label and set its value
                                     Label issueLabel = (Label) ((Parent) node).lookup("#issueNumber");
                                     if (issueLabel != null) {
-                                        issueLabel.setText(String.valueOf(finalCount + 1)); // Set incrementing issue count
+                                        issueLabel.setText(idReclamation); // Display ID
                                     }
 
                                     Label label = (Label) ((Parent) node).lookup("#Client");
-                                    if (label != null) {
-                                        label.setText(client);
-                                    }
+                                    if (label != null) label.setText(client);
 
                                     label = (Label) ((Parent) node).lookup("#Rec_Text");
-                                    if (label != null) {
-                                        label.setText(recText);
-                                    }
+                                    if (label != null) label.setText(recText);
 
                                     label = (Label) ((Parent) node).lookup("#date_Reclamation");
-                                    if (label != null) {
-                                        label.setText(dateReclamation);
-                                    }
+                                    if (label != null) label.setText(dateReclamation);
 
                                     Button activeButton = (Button) ((Parent) node).lookup("#activeButton");
                                     if (activeButton != null) {
-                                        activeButton.setOnAction(event -> openPopupWindow(client, recText, dateReclamation, status , idClient));
+                                        activeButton.setOnAction(event -> openPopupWindow(client, recText, dateReclamation, status, idClient));
                                     }
-
 
                                     pnItems.getChildren().add(node);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             });
-
-                            count++;  // Increment the counter for each complaint displayed
                         }
                     }
                 } catch (SQLException | IOException e) {
@@ -359,7 +269,11 @@ public class Controller {
 
 
 
-    private void openPopupWindow(String client, String recText, String dateReclamation, String status , String idClient) {
+
+
+
+    // Open a popup window with complaint details
+    private void openPopupWindow(String client, String recText, String dateReclamation, String status, String idClient) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../Popup.fxml"));
             Parent root = loader.load();
@@ -377,7 +291,6 @@ public class Controller {
         }
     }
 
-
     @FXML
     public void applyLimitFilter() {
         String limitText = limitField.getText();
@@ -389,6 +302,6 @@ public class Controller {
         } catch (NumberFormatException e) {
             System.err.println("Invalid limit value: " + limitText);
         }
-        listComplaints(limit);  // Pass the limit to the listComplaints method
+        listComplaints(limit); // Apply the limit filter to the complaint list
     }
 }
