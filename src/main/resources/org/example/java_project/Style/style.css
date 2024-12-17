@@ -1,18 +1,18 @@
-.button
-{
--fx-background-color : #0048ff;
--fx-text-fill : #e7e5e5;
-}
+
 
 .button:hover{
--fx-background-color : #0077ff;
+-fx-background-color : #2262C6;
 }
 .button:pressed
 {
--fx-background-color : #0077ff;
+-fx-background-color : #2262C6;
 }
 /* VBox container style */
-
+VBox {
+    -fx-background-color: #2262C6; /* Background color */
+    -fx-padding: 20px; /* Padding around the VBox */
+    -fx-spacing: 15px; /* Spacing between child elements */
+}
 
 /* ImageView style */
 ImageView {
@@ -23,39 +23,15 @@ ImageView {
 }
 
 /* Label style */
-Label {
-    -fx-text-fill: #070805; /* Text color */
-    -fx-font-size: 18px; /* Font size */
-    -fx-font-weight: bold; /* Bold font weight */
-    -fx-alignment: CENTER; /* Centered text */
-    -fx-padding: 10px; /* Padding around the label */
-}
+
+
 Button {
-    -fx-background-color : #0048ff;
-    -fx-text-fill : #e7e5e5;
-        -fx-font-size: 16px; /* Font size */
+    -fx-background-color: #2262C6; /* Button background color */
+    -fx-text-fill: #ffffff; /* Text color */
+    -fx-font-size: 16px; /* Font size */
     -fx-font-weight: bold; /* Bold font */
     -fx-border-radius: 20px; /* Rounded corners */
     -fx-cursor: hand; /* Hand cursor on hover */
-}
-/*POPUP*/
-/* style.css */
-.displayBox {
-    -fx-background-color: #f9f9f9;
-    -fx-border-color: #cccccc;
-    -fx-border-width: 1px;
-    -fx-border-radius: 5px;
-    -fx-padding: 10px;
-}
-
-.textContainer {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #000000;
-    -fx-border-width: 1px;
-    -fx-border-radius: 5px;
-    -fx-padding: 10px;
-    -fx-max-width: 500px; /* Adjust the width as needed */
-    -fx-max-height: 200px; /* Adjust the height as needed */
 }
 
 .messageTextFlow {

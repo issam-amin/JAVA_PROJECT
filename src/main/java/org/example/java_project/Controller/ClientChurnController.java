@@ -299,7 +299,7 @@ public class ClientChurnController {
         Dataset<Row> testData = spark.read()
                 .option("header", "false")
                 .schema(schema)
-                .csv("hdfs://localhost:9000/amine/input/data_client.csv");
+                .csv("hdfs://localhost:9000/test/input/data_client.csv");
 
         testData = testData.filter("TotalCharges IS NOT NULL AND TotalCharges != ''")
                 .withColumn("TotalCharges", testData.col("TotalCharges").cast(DataTypes.DoubleType))

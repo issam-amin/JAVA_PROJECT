@@ -1,5 +1,6 @@
 package org.example.java_project.Controller;
 
+import com.gluonhq.charm.glisten.control.ProgressIndicator;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -17,6 +18,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,13 +52,14 @@ public class Top3jobController implements Initializable {
     BarChart<String, Number>  barChart;
 
     @FXML
+    HBox loader;
+
+    @FXML
     DatePicker date;
     @FXML
     VBox List;
     @FXML
     protected VBox pane;
-    @FXML
-    Text state;
     @FXML
     VBox pnItems ;
     @Override
@@ -124,7 +128,7 @@ public class Top3jobController implements Initializable {
                 }
                 barChart.setLegendVisible(false);
                 pane.getChildren().clear();
-                state.setText("");
+                loader.getChildren().clear();
                 pane.getChildren().add(barChart);
                 listComplaints( Top3Job.getlistComplaints() , LocalDate.now() ,Top3Job.some);
             });
@@ -132,15 +136,15 @@ public class Top3jobController implements Initializable {
 
         job.setOnRunning(workerStateEvent -> {
             Platform.runLater(() -> {
-                state.setText("Loading...");
-                state.setStyle("-fx-text-fill: white;");
-                System.out.println("dds");
+                ProgressIndicator progressIndicator = new ProgressIndicator();
+                loader.getChildren().clear();
+                loader.setAlignment(Pos.CENTER);
+                loader.getChildren().add(progressIndicator);
             });
         });
         job.setOnFailed(event->{
             Platform.runLater(() -> {
-                state.setText("");
-
+                loader.getChildren().clear();
             });
 
         });
@@ -184,7 +188,6 @@ public class Top3jobController implements Initializable {
     
     void getOldJob(String jobName, LocalDate  date){
 
-
         OldTop3job job = new OldTop3job(jobName , date);
         job.setOnSucceeded(workerStateEvent -> {
             
@@ -193,10 +196,10 @@ public class Top3jobController implements Initializable {
                 CategoryAxis xAxis2 = new CategoryAxis();
                 NumberAxis yAxis2 = new NumberAxis(0, 100, 10); // from 0 to 100 with tick unit of 10
                 yAxis2.setLabel("Percentage (%)");
-                xAxis2.setStyle("-fx-tick-label-fill: white; " +
+                xAxis2.setStyle("-fx-tick-label-fill: black; " +
                         "-fx-tick-label-font-size: 14px; " +
                         "-fx-tick-label-font-weight: bold;"); // X-axis text color
-                yAxis2.setStyle("-fx-tick-label-fill: white; " +
+                yAxis2.setStyle("-fx-tick-label-fill: black; " +
                         "-fx-tick-label-font-size: 14px; " +
                         "-fx-tick-label-font-weight: bold;");
 
@@ -221,7 +224,7 @@ public class Top3jobController implements Initializable {
                     addDataPointInteractivity(item);
                 }
                 barChart.setLegendVisible(false);
-                state.setText("");
+                loader.getChildren().clear();
                 pane.getChildren().clear();
                 pane.getChildren().add(barChart);
                 listComplaints( OldTop3job.getlistComplaints() , date ,OldTop3job.some);
@@ -230,16 +233,17 @@ public class Top3jobController implements Initializable {
 
         job.setOnFailed(workerStateEvent -> {
              showCustomPopup(MainD.getPrimaryStage());
-             state.setText("");
+            loader.getChildren().clear();
             this.date.setValue(LocalDate.now());
         });
 
 
         job.setOnRunning(workerStateEvent -> {
             Platform.runLater(() -> {
-                state.setText("Loading...");
-                state.setStyle("-fx-text-fill: white;");
-                System.out.println("dds");
+                ProgressIndicator progressIndicator = new ProgressIndicator();
+                loader.getChildren().clear();
+                loader.setAlignment(Pos.CENTER);
+                loader.getChildren().add(progressIndicator);
             });
         });
         Thread testJob = new Thread(job);
@@ -255,7 +259,6 @@ public class Top3jobController implements Initializable {
                 Node node =  FXMLLoader.load(getClass().getResource("../Item.fxml"));
 
                 Parent parentNode = (Parent) node;
-
                 ImageView image = (ImageView) parentNode.lookup("#image") ;
 
 
@@ -283,9 +286,7 @@ public class Top3jobController implements Initializable {
                     label.setText(String.format("%.2f%%", pair.getValue() * 1.0 /some * 100));
                 }
 
-                final Button Action = (Button) parentNode.lookup("#ActionButton");
-                Action.setDisable(true);
-                Action.setVisible(false);                /*Action.setOnMouseClicked(event ->{
+                    /*Action.setOnMouseClicked(event ->{
                     Stage newStage = new Stage();
                     newStage.setTitle("New Stage");
                     Parent newRoot = null;

@@ -14,7 +14,7 @@ public class DbConnection {
         try {
             if(connection == null || connection.isClosed()) {
                 try {
-                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/claims", "root", "PHW#84#jeor");
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

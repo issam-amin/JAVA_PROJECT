@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.example.java_project.Auth.SessionManager;
 import org.example.java_project.Service.DbConnection;
 import org.example.java_project.Service.hadoopConf;
 
@@ -45,6 +46,8 @@ public class Controller {
 
     @FXML
     private Button activeButton;
+    @FXML
+    Label userName;
 
     @FXML
     private Label CompletedIssues;
@@ -63,6 +66,7 @@ public class Controller {
     private final Set<String> addedComplaints = new HashSet<>();
     @FXML
     private void initialize() {
+        userName.setText(SessionManager.getInstance().UserName());
         getAllIssues();
         IssueTotal.textProperty().bind(IssueValue);
         getAllClients();
