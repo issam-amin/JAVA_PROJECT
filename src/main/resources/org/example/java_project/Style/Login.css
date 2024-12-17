@@ -9,7 +9,7 @@
 
 .login_image_container{
     -fx-alignment: center-right;
-    -fx-background-color: #0048ff;
+    -fx-background-color: #2262C6;
     /*
     -fx-background-color: #2262C6;
     */
@@ -47,7 +47,7 @@
 .login_form_button{
     -fx-pref-width: 90;
     -fx-pref-height: 37;
-    -fx-background-color: #0077ff;
+    -fx-background-color: #2262C6;
     -fx-font-weight: bold;
     -fx-font-size: 18;
     -fx-font-family: Calibri;
@@ -67,7 +67,7 @@
 
 .login_form_label{
 
-    -fx-fill: #0077ff;
+    -fx-fill: #2262C6;
     -fx-font-size: 40;
     -fx-font-weight: bold;
 
