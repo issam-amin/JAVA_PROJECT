@@ -29,5 +29,6 @@
             </TableView>
          </children>
       </HBox>
+      <HBox fx:id="loader" alignment="CENTER" prefHeight="72.0" prefWidth="1027.0" />
    </children>
 </VBox>

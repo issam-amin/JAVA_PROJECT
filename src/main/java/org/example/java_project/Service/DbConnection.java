@@ -14,7 +14,7 @@ public class DbConnection {
         try {
             if(connection == null || connection.isClosed()) {
                 try {
-                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/claims", "root", "PHW#84#jeor");
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -146,6 +146,7 @@ public class DbConnection {
 
         return null;
     }
+
     public static Map<String, String> getAllClientNames() {
         Map<String, String> clientNames = new HashMap<>();
         String sql = "SELECT id, CONCAT(firstName, ' ', lastName) AS name FROM customer";

@@ -2,21 +2,31 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 
-
-<BorderPane prefHeight="434.0" prefWidth="571.0" styleClass="displayBox" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.PopupController">
-   <center>
-       <VBox alignment="CENTER" prefHeight="382.0" prefWidth="590.0" spacing="10" BorderPane.alignment="CENTER">
-           <padding>
-               <Insets bottom="15" left="15" right="15" top="15" />
-           </padding>
-         <children>
-              <Label fx:id="messageLabel" style="-fx-font-size: 14px; -fx-text-fill: #333;" text="Default message" />
-              <Button onAction="#closePopup" style="-fx-background-color: #2A73FF; -fx-text-fill: white;" text="Close" />
-         </children>
-       </VBox>
-   </center>
+<BorderPane prefHeight="434.0" prefWidth="571.0" styleClass="displayBox" stylesheets="@Style/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.PopupController">
+    <center>
+        <VBox alignment="CENTER" prefHeight="382.0" prefWidth="590.0" spacing="10" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15" />
+            </padding>
+            <children>
+                <Label fx:id="messageLabel" style="-fx-font-size: 14px; -fx-text-fill: #333;" text="Default message" />
+                <ComboBox fx:id="statusComboBox" onAction="#updateStatus" style="-fx-font-size: 14px;">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="pending" />
+                            <String fx:value="completed" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <Button onAction="#closePopup" style="-fx-background-color: #2A73FF; -fx-text-fill: white;" text="Close" />
+            </children>
+        </VBox>
+    </center>
 </BorderPane>
