@@ -1,10 +1,12 @@
 package org.example.java_project;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.example.java_project.config.kafkaConfig;
 
 public class MainD extends Application {
     private double x, y;
@@ -27,6 +29,21 @@ public class MainD extends Application {
             primaryStage.setY(event.getScreenY() - y);
         });
         primaryStage.show();
+
+
+        Task task = new Task<Void>() {
+
+            @Override
+            protected Void call() throws Exception {
+                kafkaConfig.getKafkaConfig();
+                kafkaConfig.readLogs();
+                return null;
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
     }
 
     public static Stage getPrimaryStage() {

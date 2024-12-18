@@ -322,8 +322,7 @@ public class Top3jobController implements Initializable {
         popupStage.initModality(Modality.APPLICATION_MODAL); // Blocks interaction with parent stage
         popupStage.initOwner(parentStage); // Sets the owner for the pop-up
 
-        // Design the content of the pop-up
-        Text message = new Text("This is a custom pop-up!");
+        Text message = new Text("no data for this date");
         Button closeButton = new Button("Close");
         closeButton.setOnAction(e -> popupStage.close());
 

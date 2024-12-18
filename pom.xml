@@ -154,6 +154,26 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.13</artifactId>
+            <version>3.9.0</version>
+        </dependency>
+
+        <!-- Kafka Clients (for Producer and Consumer) -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>3.9.0</version>
+        </dependency>
+
+        <!-- Kafka Streams Library -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+            <version>3.9.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
