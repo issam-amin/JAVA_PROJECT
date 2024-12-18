@@ -1,4 +1,5 @@
-package org.example.clientside.config;
+/*
+package org.example.java_project.config;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -49,6 +50,7 @@ public class kafkaConfig {
     }
 
 
+*/
 
 
 
