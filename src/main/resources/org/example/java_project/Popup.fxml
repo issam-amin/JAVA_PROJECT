@@ -7,11 +7,10 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox alignment="CENTER" prefHeight="434.0" prefWidth="571.0" spacing="10" styleClass="displayBox" stylesheets="@Style/style.css" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.PopupController">
+<VBox alignment="CENTER" prefHeight="437.0" prefWidth="646.0" spacing="10" styleClass="displayBox" stylesheets="@Style/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.java_project.Controller.PopupController">
     <padding>
         <Insets bottom="15" left="15" right="15" top="15" />
     </padding>
@@ -19,9 +18,10 @@
         <Label prefHeight="49.0" prefWidth="132.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0048ff;" text="DETAILS" />
         <ScrollPane fitToWidth="true" prefHeight="202.0" prefWidth="579.0">
             <content>
-                <TextFlow id="messageLabel" fx:id="messageLabel" styleClass="messageTextFlow" />
+                <TextFlow fx:id="messageLabel" styleClass="messageTextFlow" />
             </content>
         </ScrollPane>
+
         <ComboBox id="statusComboBox" fx:id="statusComboBox" onAction="#updateStatus" styleClass="styledComboBox">
             <items>
                 <FXCollections fx:factory="observableArrayList">
@@ -30,6 +30,6 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <Button onAction="#closePopup" style="-fx-background-color: #2A73FF; -fx-text-fill: white;" text="Close" />
+        <Button  fx:id="closeButton" onAction="#closePopup" style="-fx-background-color: #2A73FF; -fx-text-fill: white;" text="Close" />
     </children>
 </VBox>

@@ -33,7 +33,7 @@ public class UniqueUserCount {
         UniqueUserCount.jobName = jobName;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.currentDate = LocalDate.now().format(formatter);
-        this.input = "/test/input/data.csv";
+        this.input = "/test/input/dataJob.csv";
         this.output = "/test/output_" + currentDate + "_" + jobName;
     }
 
@@ -48,7 +48,7 @@ public class UniqueUserCount {
                         System.out.println("Output already exists.");
                         return formatReturn();
                     } else {
-                        return runJob("src/main/resources/data.csv", output, input, jobName);
+                        return runJob("src/main/resources/dataJob.csv", output, input, jobName);
                     }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -56,7 +56,7 @@ public class UniqueUserCount {
             }
             case REFRESH: {
                 try {
-                    return runJob("src/main/resources/data.csv", output, input, jobName);
+                    return runJob("src/main/resources/dataJob.csv", output, input, jobName);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -164,6 +164,7 @@ public class UniqueUserCount {
         return statistics;
     }
 
+/*
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {
             System.err.println("Usage: UniqueUserCount <input path> <output path>");
@@ -208,6 +209,7 @@ public class UniqueUserCount {
             System.exit(1);
         }
     }
+*/
 }
 
 

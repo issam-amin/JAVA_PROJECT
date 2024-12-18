@@ -37,13 +37,12 @@ public class clientTypeJob extends Task<Map<String, Integer>> {
         this.jobTime = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.currentDate = LocalDate.now().format(formatter);
-        this.input = "/test/input/data.csv";
+        this.input = "/test/input/dataJob.csv";
         this.output = "/test/output_" + currentDate + "_" + jobName;
     }
 
     @Override
     protected Map<String, Integer> call() throws Exception {
-        // Use the singleton FileSystem instance from hadoopConf
         fs = hadoopConf.getFileSystem();
         boolean outputExists = fs.exists(new Path(output));
 
@@ -55,7 +54,7 @@ public class clientTypeJob extends Task<Map<String, Integer>> {
                 fs.delete(new Path(output), true);
                 System.out.println("Old output deleted for job: " + jobName);
             }
-            return runJob("src/main/resources/data.csv", output, input, jobName);
+            return runJob("src/main/resources/dataJob.csv", output, input, jobName);
         }
     }
 

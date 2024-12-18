@@ -43,7 +43,8 @@ public class Controller {
     public HBox itemC;
     public TextField search_bar;
     public TextField limitField;
-
+    @FXML
+    public TextField id_search_bar;
     @FXML
     private Button activeButton;
     @FXML
@@ -77,6 +78,7 @@ public class Controller {
         PendingIssues.textProperty().bind(PendingIssuesValue);
         listComplaints(0);
 
+        id_search_bar.textProperty().addListener((observable, oldValue, newValue) -> searchById());
         search_bar.textProperty().addListener((observable, oldValue, newValue) -> listComplaints(0));
     }
 
@@ -129,7 +131,7 @@ public class Controller {
                 String clientCount = "0";
                 Connection connection = DbConnection.getConnection();
                 try {
-                    String sql = "SELECT COUNT(*) FROM client";
+                    String sql = "SELECT COUNT(*) FROM customer";
                     Statement statement = connection.createStatement();
                     ResultSet resultSet = statement.executeQuery(sql);
                     if (resultSet.next()) {
@@ -200,11 +202,20 @@ public class Controller {
         pnItems.getChildren().clear();  // Clear the displayed items.
         addedComplaints.clear();        // Reset the duplicate tracking set.
 
-        if (limit <= 0) {
-            limit = 20; // Default limit if no value is specified
+        try {
+            String limitText = limitField.getText();
+            if (!limitText.isEmpty()) {
+                limit = Integer.parseInt(limitText);
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid limit value: " + limitField.getText());
         }
 
-        int finalLimit = limit;  // Capture limit for use inside the task
+        if (limit <= 0) {
+            limit = 20;
+        }
+
+        int finalLimit = limit;
 
         Task<Void> task = new Task<>() {
             @Override
@@ -213,6 +224,7 @@ public class Controller {
                     ResultSet complaints = getComplainte();
                     String searchTerm = search_bar.getText().toLowerCase();
                     int count = 0;  // Counter to track the number of complaints displayed
+                    System.out.println("Final limit: " + finalLimit);
 
                     while (complaints.next() && count < finalLimit) {
                         String client = complaints.getString("Client").toLowerCase();
@@ -276,15 +288,103 @@ public class Controller {
 
 
 
-    // Open a popup window with complaint details
+    //search by id
+    private void searchById() {
+        pnItems.getChildren().clear();  // Clear the displayed items.
+        addedComplaints.clear();        // Reset the duplicate tracking set.
+
+        String idSearchTerm = id_search_bar.getText().toLowerCase(); // Get ID search term
+        int limit = -1;
+
+        // Parse the limit from the limitField
+        try {
+            String limitText = limitField.getText();
+            if (!limitText.isEmpty()) {
+                limit = Integer.parseInt(limitText);
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid limit value: " + limitField.getText());
+        }
+
+        if (limit <= 0) {
+            limit = 20; // Default limit if no value is specified or invalid
+        }
+
+        int finalLimit = limit;  // Capture limit for use inside the task
+
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    ResultSet complaints = getComplainte();
+                    int count = 0;  // Counter to track the number of complaints displayed
+
+                    while (complaints.next() && count < finalLimit) {
+                        String client = complaints.getString("Client").toLowerCase();
+                        String recText = complaints.getString("Rec_Text").toLowerCase();
+                        String dateReclamation = complaints.getString("date_Reclamation").toLowerCase();
+                        String status = complaints.getString("status_Rec");
+                        String idClient = complaints.getString("id_C");
+                        String idReclamation = complaints.getString("id_R"); // Fetch ID
+
+                        String complaintKey = client + recText + dateReclamation;
+
+                        // Filter complaints based on ID search term only
+                        if (idReclamation.contains(idSearchTerm) && addedComplaints.add(complaintKey)) {
+                            count++;  // Increment the counter as we add a complaint
+
+                            Node node = FXMLLoader.load(getClass().getResource("../MyItems.fxml"));
+                            Platform.runLater(() -> {
+                                try {
+                                    Label issueLabel = (Label) ((Parent) node).lookup("#issueNumber");
+                                    if (issueLabel != null) {
+                                        issueLabel.setText(idReclamation); // Display ID
+                                    }
+
+                                    Label label = (Label) ((Parent) node).lookup("#Client");
+                                    if (label != null) label.setText(client);
+
+                                    label = (Label) ((Parent) node).lookup("#Rec_Text");
+                                    if (label != null) label.setText(recText);
+
+                                    label = (Label) ((Parent) node).lookup("#date_Reclamation");
+                                    if (label != null) label.setText(dateReclamation);
+
+                                    Button activeButton = (Button) ((Parent) node).lookup("#activeButton");
+                                    if (activeButton != null) {
+                                        activeButton.setOnAction(event -> openPopupWindow(client, recText, dateReclamation, status, idClient));
+                                    }
+
+                                    pnItems.getChildren().add(node);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                    }
+                } catch (SQLException | IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+
+
+
+
+
     private void openPopupWindow(String client, String recText, String dateReclamation, String status, String idClient) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../Popup.fxml"));
             Parent root = loader.load();
-
             PopupController controller = loader.getController();
             controller.setMessage(client, recText, dateReclamation, status, idClient);
-
             Stage popupStage = new Stage();
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.setTitle("Complaint Details");
@@ -292,8 +392,10 @@ public class Controller {
             popupStage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Error loading popup FXML: " + e.getMessage());
         }
     }
+
 
     @FXML
     public void applyLimitFilter() {

@@ -62,4 +62,8 @@ Button {
 }
 
 
-
+.displayBox {
+    -fx-background-color: #f6f6f6; /* Background color */
+    -fx-padding: 20px; /* Padding around the VBox */
+    -fx-spacing: 15px; /* Spacing between child elements */
+}
