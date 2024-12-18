@@ -63,21 +63,21 @@ public class UniqueUserCountController {
         countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
 
         // Set button actions
-        loadButton.setOnAction(event -> loadData());
+        loadButton.setOnAction(event -> loadData(JobType.REFRESH));
         chartButton.setOnAction(event -> showChart());
 
         // Load initial data
-        loadData();
+        loadData(JobType.NORMAL);
     }
 
     @FXML
-    private void loadData() {
+    private void loadData( JobType jobType) {
         try {
             // Clear previous data
             tableView.getItems().clear();
 
             // Fetch new data
-            UniqueUserCount uniqueUserCount = new UniqueUserCount("UniqueUserCount", JobType.NORMAL);
+            UniqueUserCount uniqueUserCount = new UniqueUserCount("UniqueUserCount", jobType);
             HashMap<String, Integer> result = uniqueUserCount.call();
 
             // Populate TableView

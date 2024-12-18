@@ -33,40 +33,37 @@ Button {
     -fx-border-radius: 20px; /* Rounded corners */
     -fx-cursor: hand; /* Hand cursor on hover */
 }
-/* Button Style */
 
-/*
-
-.scroll-pane {
-    -fx-background-color: #02030A;
+.messageTextFlow {
+    -fx-padding: 10px;
+}
+.styledComboBox {
+    -fx-font-size: 14px;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2A73FF;
+    -fx-border-width: 2px;
+    -fx-padding: 5px;
 }
 
-.scroll-bar:horizontal, .scroll-bar:vertical{
-    -fx-background-color:transparent;
+.styledComboBox .list-cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #2A73FF;
 }
 
-.increment-button, .decrement-button {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+.styledComboBox .list-cell:hover {
+    -fx-background-color: #2A73FF;
+    -fx-text-fill: #ffffff;
 }
 
-.scroll-bar:horizontal .track,
-.scroll-bar:vertical .track{
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-background-radius: 0em;
+.styledComboBox .combo-box-popup {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2A73FF;
+    -fx-border-width: 2px;
 }
 
-.scroll-bar:horizontal .thumb,
-.scroll-bar:vertical .thumb {
-    -fx-background-color: #10165F;
-    -fx-background-radius: 5em;
-}
 
-.scroll-pane > .corner {
-    -fx-background-color: black;
-}
 .displayBox {
-    -fx-background-color: #c3bebe;
+    -fx-background-color: #f6f6f6; /* Background color */
+    -fx-padding: 20px; /* Padding around the VBox */
+    -fx-spacing: 15px; /* Spacing between child elements */
 }
-*/

@@ -44,7 +44,7 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
         this.jobTime = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.currentDate = LocalDate.now().format(formatter);
-        this.input = "/test/input/data.csv";
+        this.input = "/test/input/dataJob.csv";
         this.output = "/test/output_" +currentDate+"_"+ jobName;
     }
 
@@ -63,7 +63,7 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
 
                     }else
                     {
-                        return RunJob("src/main/resources/data.csv", output, input, jobName);
+                        return RunJob("src/main/resources/dataJob.csv", output, input, jobName);
 
                     }
                 } catch (Exception e) {
@@ -72,7 +72,11 @@ public class RectypeJob extends Task<HashMap<String, Integer>> {
             }
             case REFRESH: {
                 try {
-                    return RunJob("src/main/resources/data.csv", output, input, jobName);
+                    System.out.println("issaa");
+                    DbConnection.export("rec");
+                    System.out.println("issaa2");
+
+                    return RunJob("src/main/resources/dataJob.csv", output, input, jobName);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

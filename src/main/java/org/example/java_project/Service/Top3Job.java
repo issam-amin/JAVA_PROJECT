@@ -32,7 +32,7 @@ public class Top3Job extends Task<XYChart.Series<String, Number>>  {
     public Top3Job(String JobName , JobType jobType ){
         this.JobName = JobName;
         LocalDate currentDate = LocalDate.now();
-        this.input = "/test/input/data.csv";
+        this.input = "/test/input/dataJob.csv";
         this.output = "/test/output_"+currentDate.toString()+"_"+JobName;
         this.jobType = jobType;
     }
@@ -57,7 +57,7 @@ public class Top3Job extends Task<XYChart.Series<String, Number>>  {
                      if(tuday_output){
                         return FormatReturn();
                      }else {
-                        return RunJob("src/main/resources/data.csv");
+                        return RunJob("src/main/resources/dataJob.csv");
                      }
                 } catch (Exception e) {
                     throw new IOException("Error while reading data from " + output);
@@ -66,10 +66,8 @@ public class Top3Job extends Task<XYChart.Series<String, Number>>  {
             case REFRESH: {
                 try {
                     System.out.println("eeeee");
-/*
                     DbConnection.export("rec");
-*/
-                    return RunJob("src/main/resources/data.csv");
+                    return RunJob("src/main/resources/dataJob.csv");
                 } catch (Exception e) {
                     throw new IOException("error while refreshing");
                 }

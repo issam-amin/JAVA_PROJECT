@@ -14,7 +14,7 @@ public class DbConnection {
         try {
             if(connection == null || connection.isClosed()) {
                 try {
-                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/claims", "root", "PHW#84#jeor");
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reclamations", "root", "1234567");
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -29,7 +29,7 @@ public class DbConnection {
 
 
     public static boolean export(String table){
-        String csvFilePath = "src/main/resources/data.csv";
+        String csvFilePath = "src/main/resources/dataJob.csv";
         System.out.println("CSV file path: " + new File(csvFilePath).getAbsolutePath());
 
         // System.out.println(csvFilePath);
@@ -66,8 +66,6 @@ public class DbConnection {
     public static boolean export2(String table,String csvname){
         String csvFilePath = "src/main/resources/"+csvname;
         System.out.println("CSV file path: " + new File(csvFilePath).getAbsolutePath());
-
-        // System.out.println(csvFilePath);
         try {
             Connection connection = getConnection();
             String sql = "SELECT id ,Gender, SeniorCitizen, Partner, Dependents,tenure, " +
@@ -77,20 +75,17 @@ public class DbConnection {
                     "FROM " + table + ";";
 
 
-            // Query to extract table data
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Write CSV file
             FileWriter csvWriter = new FileWriter(csvFilePath);
-            // Get column names and write as header row in CSV
             int columnCount = resultSet.getMetaData().getColumnCount();
-            // Write data rows
             while (resultSet.next()) {
                 for (int i = 1; i <= columnCount; i++) {
                     csvWriter.append(resultSet.getString(i));
-                    if (i < columnCount) csvWriter.append(","); // Add comma if not the last column
+                    if (i < columnCount) csvWriter.append(",");
                 }
-                csvWriter.append("\n"); // New line after each row
+                csvWriter.append("\n");
             }
             csvWriter.flush();
             csvWriter.close();
@@ -128,14 +123,14 @@ public class DbConnection {
         Connection connection = getConnection();
         HashMap<String, String> client = new HashMap<>();
 
-        String sql = "SELECT * FROM client WHERE  id = "+id ; // Query to extract table data
+        String sql = "SELECT * FROM customer WHERE  id = "+id ; // Query to extract table data
         Statement statement = null;
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                    String nom = resultSet.getString("Nom");
-                    String prenom = resultSet.getString("Prenom");
+                    String nom = resultSet.getString("firstName");
+                    String prenom = resultSet.getString("lastName");
                     // Return concatenated result
                     return nom + " " + prenom;
 

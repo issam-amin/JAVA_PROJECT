@@ -13,11 +13,12 @@ public class ComplaintService {
                 throw new SQLException("Connection is closed or null.");
             }
 
-            String sql = "SELECT CONCAT(client.Nom, ' ', client.Prenom) AS Client, client.CNE, rec.Rec_Text, rec.date_Reclamation, typerec.NomType, rec.status_Rec, rec.id_C  " +
-                    "FROM client " +
+            String sql = "SELECT CONCAT(client.firstName, ' ', client.lastName) AS Client, rec.Rec_Text, rec.date_Reclamation, typerec.NomType, rec.status_Rec, rec.id_C, rec.id_R " +
+                    "FROM customer AS client " +
                     "JOIN rec ON client.id = rec.id_C " +
                     "JOIN typerec ON typerec.id = rec.id_T " +
-                    "ORDER BY rec.date_Reclamation DESC";
+                    "ORDER BY rec.date_Reclamation DESC, rec.id_C DESC";
+
 
             Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
